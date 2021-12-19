@@ -9,10 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.demo.engineer.entity.ApprovalRecords;
+import org.jeecg.modules.demo.engineer.entity.WorkFlow;
 import org.jeecg.modules.demo.engineer.service.IApprovalRecordsService;
+import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Description: 审批记录
@@ -34,6 +39,10 @@ import java.util.Arrays;
 public class ApprovalRecordsController extends JeecgController<ApprovalRecords, IApprovalRecordsService> {
     @Autowired
     private IApprovalRecordsService approvalRecordsService;
+    @Autowired
+    private ISysBaseAPI sysBaseAPI;
+    @Autowired
+    private IWorkFlowService workFlowService;
 
     /**
      * 分页列表查询
@@ -51,8 +60,16 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
+        // 查询当前登录用户可以查看到的步骤
+        List<String> roleIds = sysBaseAPI.getRoleIdsByUsername(JwtUtil.getUserNameByToken(req));
+        QueryWrapper<WorkFlow> flowQueryWrapper = new QueryWrapper<>();
+        flowQueryWrapper.select("step_id");
+        flowQueryWrapper.in("role_id",roleIds);
+        List<Object> stepIds = workFlowService.listObjs(flowQueryWrapper);
+
         QueryWrapper<ApprovalRecords> queryWrapper = QueryGenerator.initQueryWrapper(approvalRecords, req.getParameterMap());
-        Page<ApprovalRecords> page = new Page<ApprovalRecords>(pageNo, pageSize);
+        Page<ApprovalRecords> page = new Page<>(pageNo, pageSize);
+        queryWrapper.in("step_id", stepIds);
         IPage<ApprovalRecords> pageList = approvalRecordsService.page(page, queryWrapper);
         return Result.OK(pageList);
     }
