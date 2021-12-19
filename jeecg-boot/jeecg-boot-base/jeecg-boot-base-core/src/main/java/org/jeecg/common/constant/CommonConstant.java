@@ -324,4 +324,15 @@ public interface CommonConstant {
     /** 系统通告消息状态：2=已撤销 */
     String ANNOUNCEMENT_SEND_STATUS_2 = "2";
 
+
+    /** 审批状态 （1：同意  2：不同意） */
+    public final static int AGREE = 1;
+    public final static int DISAGREE = 2;
+
+    /**
+     * 审批是否通过 （1：同意  2：不同意）
+     */
+    public static final int PASS = 1;
+    public static final int NO_PASS = 2;
+
 }

@@ -10,7 +10,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="主要内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="content">
-              <a-input v-model="model.content" placeholder="请输入主要内容"  ></a-input>
+              <a-textarea v-model="model.content" rows="4" placeholder="请输入主要内容" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">

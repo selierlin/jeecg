@@ -4,43 +4,28 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="报表类型" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalType">
-              <j-dict-select-tag type="list" v-model="model.approvalType" dictCode="approval_type" placeholder="请选择报表类型" />
+            <a-form-model-item label="流程id" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="flowId">
+              <a-input-number v-model="model.flowId" placeholder="请输入流程id" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="主要内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="content">
-              <a-textarea v-model="model.content" rows="4" placeholder="请输入主要内容" />
+            <a-form-model-item label="步骤id" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="stepId">
+              <a-input-number v-model="model.stepId" placeholder="请输入步骤id" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="发件单位" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="unitName">
-              <a-input v-model="model.unitName" placeholder="请输入发件单位"  ></a-input>
+            <a-form-model-item label="步骤名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="stepName">
+              <a-input v-model="model.stepName" placeholder="请输入步骤名称"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="收件时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="receiptTime">
-              <j-date placeholder="请选择收件时间"  v-model="model.receiptTime" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
+            <a-form-model-item label="下一个步骤id" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="nextStepId">
+              <a-input-number v-model="model.nextStepId" placeholder="请输入下一个步骤id" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="审批意见" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalOpinion">
-              <a-textarea v-model="model.approvalOpinion" rows="4" placeholder="请输入审批意见" />
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="返回时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="returnTime">
-              <j-date placeholder="请选择返回时间"  v-model="model.returnTime" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="来源" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="source">
-              <a-input v-model="model.source" placeholder="请输入来源"  ></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="报审文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileSource">
-              <j-upload v-model="model.fileSource"   ></j-upload>
+            <a-form-model-item label="角色" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="roleId">
+              <j-dict-select-tag type="list" v-model="model.roleId" dictCode="sys_role,role_name,role_code" placeholder="请选择角色" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -55,7 +40,7 @@
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
-    name: 'ApprovalRecordsForm',
+    name: 'WorkFlowForm',
     components: {
     },
     props: {
@@ -82,9 +67,9 @@
         validatorRules: {
         },
         url: {
-          add: "/engineer/approvalRecords/add",
-          edit: "/engineer/approvalRecords/edit",
-          queryById: "/engineer/approvalRecords/queryById"
+          add: "/engineer/workFlow/add",
+          edit: "/engineer/workFlow/edit",
+          queryById: "/engineer/workFlow/queryById"
         }
       }
     },

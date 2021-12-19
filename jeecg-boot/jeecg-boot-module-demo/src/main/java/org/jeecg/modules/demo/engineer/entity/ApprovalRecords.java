@@ -35,13 +35,13 @@ public class ApprovalRecords implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private java.lang.String id;
-	/**创建人*/
-    @ApiModelProperty(value = "创建人")
+	/**申请人*/
+    @ApiModelProperty(value = "申请人")
     private java.lang.String createBy;
-	/**创建日期*/
+	/**申请日期*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建日期")
+    @ApiModelProperty(value = "申请日期")
     private java.util.Date createTime;
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
@@ -91,4 +91,14 @@ public class ApprovalRecords implements Serializable {
 	@Excel(name = "报审文件", width = 15)
     @ApiModelProperty(value = "报审文件")
     private java.lang.String fileSource;
+	/**状态*/
+	@Excel(name = "状态", width = 15, dicCode = "flow_state")
+	@Dict(dicCode = "flow_state")
+    @ApiModelProperty(value = "状态")
+    private java.lang.Integer state;
+	/**步骤*/
+	@Excel(name = "步骤", width = 15, dictTable = "work_flow", dicText = "step_name", dicCode = "step_id")
+	@Dict(dictTable = "work_flow", dicText = "step_name", dicCode = "step_id")
+    @ApiModelProperty(value = "步骤")
+    private java.lang.Integer stepId;
 }

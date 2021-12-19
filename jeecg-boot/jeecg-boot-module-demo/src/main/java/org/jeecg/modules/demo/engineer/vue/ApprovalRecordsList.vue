@@ -138,6 +138,16 @@
             }
           },
           {
+            title:'申请人',
+            align:"center",
+            dataIndex: 'createBy'
+          },
+          {
+            title:'申请日期',
+            align:"center",
+            dataIndex: 'createTime'
+          },
+          {
             title:'报表类型',
             align:"center",
             dataIndex: 'approvalType_dictText'
@@ -158,11 +168,6 @@
             dataIndex: 'receiptTime'
           },
           {
-            title:'审批意见',
-            align:"center",
-            dataIndex: 'approvalOpinion'
-          },
-          {
             title:'返回时间',
             align:"center",
             dataIndex: 'returnTime'
@@ -177,6 +182,16 @@
             align:"center",
             dataIndex: 'fileSource',
             scopedSlots: {customRender: 'fileSlot'}
+          },
+          {
+            title:'状态',
+            align:"center",
+            dataIndex: 'state_dictText'
+          },
+          {
+            title:'步骤',
+            align:"center",
+            dataIndex: 'stepId_dictText'
           },
           {
             title: '操作',
@@ -220,6 +235,10 @@
         fieldList.push({type:'datetime',value:'returnTime',text:'返回时间'})
         fieldList.push({type:'string',value:'source',text:'来源',dictCode:''})
         fieldList.push({type:'string',value:'fileSource',text:'报审文件',dictCode:''})
+        fieldList.push({type:'int',value:'state',text:'状态',dictCode:'flow_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'string',value:'createBy',text:'申请人',dictCode:''})
+        fieldList.push({type:'datetime',value:'createTime',text:'申请日期'})
         this.superFieldList = fieldList
       }
     }

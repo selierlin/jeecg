@@ -1,24 +1,25 @@
 package org.jeecg.modules.demo.engineer.service;
 
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.modules.demo.engineer.entity.ApprovalRecords;
+import org.jeecg.modules.demo.engineer.entity.WorkFlow;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * @Description: 审批记录
+ * @Description: 流程表
  * @Author: jeecg-boot
- * @Date: 2021-12-11
+ * @Date: 2021-12-19
  * @Version: V1.0
  */
-public interface IApprovalRecordsService extends IService<ApprovalRecords> {
+public interface IWorkFlowService extends IService<WorkFlow> {
 
     /**
-     * 审批
+     * 获取审批下个节点
      *
      * @param id     工单id
      * @param isPass 是否通过
+     * @param stepId 当前节点
      * @param remark 备注
      * @return
      */
-    Result<?> audit(String id, Integer isPass, String remark);
+    Result<Integer> getStedId(String id, Integer isPass, Integer stepId, String remark);
 }

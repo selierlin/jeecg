@@ -4,21 +4,6 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="报表类型">
-              <j-dict-select-tag placeholder="请选择报表类型" v-model="queryParam.approvalType" dictCode="approval_type"/>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -27,7 +12,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('审批记录')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('流程表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -84,8 +69,6 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-          <a-divider type="vertical" />
-          <a @click="handleAudit(record)">审批</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -106,7 +89,7 @@
       </a-table>
     </div>
 
-    <approval-records-modal ref="modalForm" @ok="modalFormOk"></approval-records-modal>
+    <work-flow-modal ref="modalForm" @ok="modalFormOk"></work-flow-modal>
   </a-card>
 </template>
 
@@ -115,18 +98,18 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import ApprovalRecordsModal from './modules/ApprovalRecordsModal'
+  import WorkFlowModal from './modules/WorkFlowModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
-    name: 'ApprovalRecordsList',
+    name: 'WorkFlowList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      ApprovalRecordsModal
+      WorkFlowModal
     },
     data () {
       return {
-        description: '审批记录管理页面',
+        description: '流程表管理页面',
         // 表头
         columns: [
           {
@@ -140,60 +123,30 @@
             }
           },
           {
-            title:'报表类型',
+            title:'流程id',
             align:"center",
-            dataIndex: 'approvalType_dictText'
+            sorter: true,
+            dataIndex: 'flowId'
           },
           {
-            title:'主要内容',
+            title:'步骤id',
             align:"center",
-            dataIndex: 'content'
+            dataIndex: 'stepId'
           },
           {
-            title:'发件单位',
+            title:'步骤名称',
             align:"center",
-            dataIndex: 'unitName'
+            dataIndex: 'stepName'
           },
           {
-            title:'收件时间',
+            title:'下一个步骤id',
             align:"center",
-            dataIndex: 'receiptTime'
+            dataIndex: 'nextStepId'
           },
           {
-            title:'返回时间',
+            title:'角色',
             align:"center",
-            dataIndex: 'returnTime'
-          },
-          {
-            title:'来源',
-            align:"center",
-            dataIndex: 'source'
-          },
-          {
-            title:'报审文件',
-            align:"center",
-            dataIndex: 'fileSource',
-            scopedSlots: {customRender: 'fileSlot'}
-          },
-          {
-            title:'状态',
-            align:"center",
-            dataIndex: 'state_dictText'
-          },
-          {
-            title:'步骤',
-            align:"center",
-            dataIndex: 'stepId_dictText'
-          },
-          {
-            title:'申请人',
-            align:"center",
-            dataIndex: 'createBy'
-          },
-          {
-            title:'申请日期',
-            align:"center",
-            dataIndex: 'createTime'
+            dataIndex: 'roleId_dictText'
           },
           {
             title: '操作',
@@ -205,12 +158,11 @@
           }
         ],
         url: {
-          list: "/engineer/approvalRecords/list",
-          delete: "/engineer/approvalRecords/delete",
-          deleteBatch: "/engineer/approvalRecords/deleteBatch",
-          exportXlsUrl: "/engineer/approvalRecords/exportXls",
-          importExcelUrl: "engineer/approvalRecords/importExcel",
-          audit: "engineer/approvalRecords/audit",
+          list: "/engineer/workFlow/list",
+          delete: "/engineer/workFlow/delete",
+          deleteBatch: "/engineer/workFlow/deleteBatch",
+          exportXlsUrl: "/engineer/workFlow/exportXls",
+          importExcelUrl: "engineer/workFlow/importExcel",
           
         },
         dictOptions:{},
@@ -228,26 +180,13 @@
     methods: {
       initDictConfig(){
       },
-      handleAudit(obj){
-        console.log(obj);
-        this.$refs.modalForm.edit(obj);
-        this.$refs.modalForm.title = "审批";
-        this.$refs.modalForm.disableSubmit = false;
-      },
       getSuperFieldList(){
         let fieldList=[];
-        fieldList.push({type:'string',value:'createBy',text:'申请人',dictCode:''})
-        fieldList.push({type:'datetime',value:'createTime',text:'申请日期'})
-        fieldList.push({type:'string',value:'approvalType',text:'报表类型',dictCode:'approval_type'})
-        fieldList.push({type:'string',value:'content',text:'主要内容',dictCode:''})
-        fieldList.push({type:'string',value:'unitName',text:'发件单位',dictCode:''})
-        fieldList.push({type:'datetime',value:'receiptTime',text:'收件时间'})
-        fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
-        fieldList.push({type:'datetime',value:'returnTime',text:'返回时间'})
-        fieldList.push({type:'string',value:'source',text:'来源',dictCode:''})
-        fieldList.push({type:'string',value:'fileSource',text:'报审文件',dictCode:''})
-        fieldList.push({type:'int',value:'state',text:'状态',dictCode:'flow_state'})
-        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'int',value:'flowId',text:'流程id',dictCode:''})
+        fieldList.push({type:'int',value:'stepId',text:'步骤id',dictCode:''})
+        fieldList.push({type:'string',value:'stepName',text:'步骤名称',dictCode:''})
+        fieldList.push({type:'int',value:'nextStepId',text:'下一个步骤id',dictCode:''})
+        fieldList.push({type:'string',value:'roleId',text:'角色',dictCode:'sys_role,role_name,role_code'})
         this.superFieldList = fieldList
       }
     }
