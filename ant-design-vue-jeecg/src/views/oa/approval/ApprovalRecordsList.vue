@@ -107,6 +107,7 @@
     </div>
 
     <approval-records-modal ref="modalForm" @ok="modalFormOk"></approval-records-modal>
+    <approval-records-modal1 ref="modalForm1"></approval-records-modal1>
   </a-card>
 </template>
 
@@ -116,13 +117,14 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import ApprovalRecordsModal from './modules/ApprovalRecordsModal'
+  import ApprovalRecordsModal1 from './modules/ApprovalRecordsModal1'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
     name: 'ApprovalRecordsList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      ApprovalRecordsModal
+      ApprovalRecordsModal,ApprovalRecordsModal1
     },
     data () {
       return {
@@ -229,10 +231,7 @@
       initDictConfig(){
       },
       handleAudit(obj){
-        console.log(obj);
-        this.$refs.modalForm.edit(obj);
-        this.$refs.modalForm.title = "审批";
-        this.$refs.modalForm.disableSubmit = false;
+        this.$refs.modalForm1.audit(obj);
       },
       getSuperFieldList(){
         let fieldList=[];

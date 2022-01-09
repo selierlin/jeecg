@@ -65,6 +65,7 @@ export function getAction(url,parameter) {
 
 //deleteAction
 export function deleteAction(url,parameter) {
+  debugger
   return axios({
     url: url,
     method: 'delete',

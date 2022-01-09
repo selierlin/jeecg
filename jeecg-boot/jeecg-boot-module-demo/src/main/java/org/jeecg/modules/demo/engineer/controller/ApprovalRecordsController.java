@@ -168,15 +168,14 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
      */
     @AutoLog(value = "审批记录-审批")
     @ApiOperation(value = "审批记录-审批", notes = "审批记录-审批")
-    @PostMapping(value = "/audit")
-    public Result<?> audit(@RequestParam(name = "id", required = true) String id,
-                           @RequestParam(name = "isPass", required = true) Integer isPass,
-                           @RequestParam(name = "remark", required = false) String remark
-    ) {
+    @PutMapping(value = "/audit")
+    public Result<?> audit(@RequestBody ApprovalRecords approvalRecords) {
+        String id = approvalRecords.getId();
+        Integer isPass = approvalRecords.getPass();
         if (StringUtils.isBlank(id) || isPass == null) {
             return Result.error("参数校验失败");
         }
-        return approvalRecordsService.audit(id, isPass, remark);
+        return approvalRecordsService.audit(id, isPass, approvalRecords.getApprovalOpinion());
     }
 
     /**
