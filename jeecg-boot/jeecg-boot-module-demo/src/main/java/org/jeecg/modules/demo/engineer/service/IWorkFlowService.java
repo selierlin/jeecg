@@ -22,4 +22,6 @@ public interface IWorkFlowService extends IService<WorkFlow> {
      * @return
      */
     Result<Integer> getStedId(String id, Integer isPass, Integer stepId, String remark);
+
+    Result getWorkFlowByStepId(Integer stepId);
 }

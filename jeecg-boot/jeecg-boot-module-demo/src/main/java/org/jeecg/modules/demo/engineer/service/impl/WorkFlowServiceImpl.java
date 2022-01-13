@@ -50,4 +50,15 @@ public class WorkFlowServiceImpl extends ServiceImpl<WorkFlowMapper, WorkFlow> i
         }
         return Result.OK(toStepId);
     }
+
+    @Override
+    public Result getWorkFlowByStepId(Integer stepId) {
+        QueryWrapper<WorkFlow> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("step_id", stepId);
+        WorkFlow workFlow = getOne(queryWrapper);
+        if (workFlow == null) {
+            return Result.error("找不到流程信息");
+        }
+        return Result.OK(workFlow);
+    }
 }

@@ -4,12 +4,12 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="报表类型1" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalType">
+            <a-form-model-item label="报表类型" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalType">
               <j-dict-select-tag type="list" disabled v-model="model.approvalType" dictCode="approval_type" placeholder="请选择报表类型" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="主要内容1" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="content">
+            <a-form-model-item label="主要内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="content">
               <a-textarea v-model="model.content" disabled rows="4" placeholder="请输入主要内容" />
             </a-form-model-item>
           </a-col>
@@ -31,11 +31,6 @@
           <a-col :span="24">
             <a-form-model-item label="来源" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="source">
               <a-input v-model="model.source" disabled placeholder="请输入来源"  ></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="报审文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileSource">
-              <j-upload v-model="model.fileSource" disabled   ></j-upload>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">

@@ -161,9 +161,7 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
     /**
      * 审批
      *
-     * @param id     工单id
-     * @param isPass 是否通过
-     * @param remark 备注
+     * @param approvalRecords 审批记录
      * @return
      */
     @AutoLog(value = "审批记录-审批")
@@ -172,7 +170,7 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
     public Result<?> audit(@RequestBody ApprovalRecords approvalRecords) {
         String id = approvalRecords.getId();
         Integer isPass = approvalRecords.getPass();
-        if (StringUtils.isBlank(id) || isPass == null) {
+        if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
             return Result.error("参数校验失败");
         }
         return approvalRecordsService.audit(id, isPass, approvalRecords.getApprovalOpinion());

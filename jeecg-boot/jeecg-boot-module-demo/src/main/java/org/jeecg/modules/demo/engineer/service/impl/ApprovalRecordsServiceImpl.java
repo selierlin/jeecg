@@ -3,8 +3,11 @@ package org.jeecg.modules.demo.engineer.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.ApprovalRecords;
+import org.jeecg.modules.demo.engineer.entity.WorkFlow;
+import org.jeecg.modules.demo.engineer.entity.WorkFlowLog;
 import org.jeecg.modules.demo.engineer.mapper.ApprovalRecordsMapper;
 import org.jeecg.modules.demo.engineer.service.IApprovalRecordsService;
+import org.jeecg.modules.demo.engineer.service.IWorkFlowLogService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ public class ApprovalRecordsServiceImpl extends ServiceImpl<ApprovalRecordsMappe
 
     @Autowired
     IWorkFlowService workFlowService;
+    @Autowired
+    IWorkFlowLogService workFlowLogService;
 
     @Override
     public Result<?> audit(String id, Integer isPass, String remark) {
@@ -33,9 +38,11 @@ public class ApprovalRecordsServiceImpl extends ServiceImpl<ApprovalRecordsMappe
             approvalRecords.setState(isPass);
             approvalRecords.setStepId((Integer) result.getResult());
             approvalRecords.setApprovalOpinion(remark);
-            // approvalRecords.setUpdateBy(JwtUtil.getUserNameByToken(request));
-            // approvalRecords.setUpdateTime(new Date());
 
+            Result workFlowResult = workFlowService.getWorkFlowByStepId(stepId);
+            if (workFlowResult.isSuccess()) {
+                boolean save = workFlowLogService.saveByTaskId(id, approvalRecords.getApprovalType(), isPass, stepId, remark);
+            }
             boolean update = updateById(approvalRecords);
             return update ? Result.OK() : Result.error("审批失败");
         } else {
