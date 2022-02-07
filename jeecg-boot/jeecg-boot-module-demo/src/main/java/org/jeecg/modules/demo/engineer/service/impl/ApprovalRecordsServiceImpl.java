@@ -3,12 +3,12 @@ package org.jeecg.modules.demo.engineer.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.ApprovalRecords;
-import org.jeecg.modules.demo.engineer.entity.WorkFlow;
-import org.jeecg.modules.demo.engineer.entity.WorkFlowLog;
 import org.jeecg.modules.demo.engineer.mapper.ApprovalRecordsMapper;
 import org.jeecg.modules.demo.engineer.service.IApprovalRecordsService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowLogService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ApprovalRecordsServiceImpl extends ServiceImpl<ApprovalRecordsMapper, ApprovalRecords> implements IApprovalRecordsService {
+
+    private final static Logger logger = LoggerFactory.getLogger(ApprovalRecordsServiceImpl.class);
 
     @Autowired
     IWorkFlowService workFlowService;
@@ -38,10 +40,11 @@ public class ApprovalRecordsServiceImpl extends ServiceImpl<ApprovalRecordsMappe
             approvalRecords.setState(isPass);
             approvalRecords.setStepId((Integer) result.getResult());
             approvalRecords.setApprovalOpinion(remark);
-
+            // 创建审批日志数据
             Result workFlowResult = workFlowService.getWorkFlowByStepId(stepId);
             if (workFlowResult.isSuccess()) {
                 boolean save = workFlowLogService.saveByTaskId(id, approvalRecords.getApprovalType(), isPass, stepId, remark);
+                logger.info("update work_flow_log result={}", save);
             }
             boolean update = updateById(approvalRecords);
             return update ? Result.OK() : Result.error("审批失败");

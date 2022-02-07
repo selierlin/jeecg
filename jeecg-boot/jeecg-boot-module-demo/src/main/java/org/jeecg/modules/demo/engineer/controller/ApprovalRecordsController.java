@@ -18,6 +18,7 @@ import org.jeecg.modules.demo.engineer.entity.WorkFlow;
 import org.jeecg.modules.demo.engineer.service.IApprovalRecordsService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -62,10 +63,18 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
                                    HttpServletRequest req) {
         // 查询当前登录用户可以查看到的步骤
         List<String> roleIds = sysBaseAPI.getRoleIdsByUsername(JwtUtil.getUserNameByToken(req));
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return Result.OK(roleIds);
+        }
         QueryWrapper<WorkFlow> flowQueryWrapper = new QueryWrapper<>();
         flowQueryWrapper.select("step_id");
-        flowQueryWrapper.in("role_id",roleIds);
+        if (!roleIds.contains("f6817f48af4fb3af11b9e8bf182f618b")) {
+            flowQueryWrapper.in("role_id", roleIds);
+        }
         List<Object> stepIds = workFlowService.listObjs(flowQueryWrapper);
+        if (CollectionUtils.isEmpty(stepIds)) {
+            return Result.OK(stepIds);
+        }
 
         QueryWrapper<ApprovalRecords> queryWrapper = QueryGenerator.initQueryWrapper(approvalRecords, req.getParameterMap());
         Page<ApprovalRecords> page = new Page<>(pageNo, pageSize);
