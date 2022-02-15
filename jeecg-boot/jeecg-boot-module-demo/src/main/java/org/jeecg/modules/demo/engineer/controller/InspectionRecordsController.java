@@ -39,7 +39,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
  /**
  * @Description: 报验记录
  * @Author: jeecg-boot
- * @Date:   2022-02-07
+ * @Date:   2022-02-15
  * @Version: V1.0
  */
 @Api(tags="报验记录")

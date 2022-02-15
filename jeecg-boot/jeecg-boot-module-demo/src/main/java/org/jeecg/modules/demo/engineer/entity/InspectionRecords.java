@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 报验记录
  * @Author: jeecg-boot
- * @Date:   2022-02-07
+ * @Date:   2022-02-15
  * @Version: V1.0
  */
 @Data
@@ -35,9 +35,6 @@ public class InspectionRecords implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private String id;
-	/**创建人*/
-    @ApiModelProperty(value = "创建人")
-    private String createBy;
 	/**创建日期*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -55,7 +52,8 @@ public class InspectionRecords implements Serializable {
     @ApiModelProperty(value = "所属部门")
     private String sysOrgCode;
 	/**报表类型*/
-	@Excel(name = "报表类型", width = 15)
+	@Excel(name = "报表类型", width = 15, dicCode = "inspection_type")
+	@Dict(dicCode = "inspection_type")
     @ApiModelProperty(value = "报表类型")
     private String inspectionType;
 	/**报验内容*/
@@ -63,7 +61,8 @@ public class InspectionRecords implements Serializable {
     @ApiModelProperty(value = "报验内容")
     private String reportContent;
 	/**报验人*/
-	@Excel(name = "报验人", width = 15)
+	@Excel(name = "报验人", width = 15, dicCode = "contractor")
+	@Dict(dicCode = "contractor")
     @ApiModelProperty(value = "报验人")
     private String reportor;
 	/**报验时间*/
@@ -73,9 +72,8 @@ public class InspectionRecords implements Serializable {
     @ApiModelProperty(value = "报验时间")
     private Date reportTime;
 	/**验收人*/
-	@Excel(name = "验收人", width = 15)
     @ApiModelProperty(value = "验收人")
-    private String accepter;
+    private String createBy;
 	/**验收时间*/
 	@Excel(name = "验收时间", width = 15, format = "yyyy-MM-dd")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
@@ -83,7 +81,16 @@ public class InspectionRecords implements Serializable {
     @ApiModelProperty(value = "验收时间")
     private Date acceptTime;
 	/**验收结果*/
-	@Excel(name = "验收结果", width = 15)
+	@Excel(name = "验收结果", width = 15, dicCode = "check_result")
+	@Dict(dicCode = "check_result")
     @ApiModelProperty(value = "验收结果")
     private String acceptResult;
+	/**备注*/
+	@Excel(name = "备注", width = 15)
+    @ApiModelProperty(value = "备注")
+    private String remark;
+	/**报表文件*/
+	@Excel(name = "报表文件", width = 15)
+    @ApiModelProperty(value = "报表文件")
+    private String fileSource;
 }
