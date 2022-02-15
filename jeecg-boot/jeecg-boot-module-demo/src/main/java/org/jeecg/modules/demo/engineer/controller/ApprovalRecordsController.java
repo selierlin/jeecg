@@ -93,6 +93,7 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
     @ApiOperation(value = "审批记录-添加", notes = "审批记录-添加")
     @PostMapping(value = "/add")
     public Result<?> add(@RequestBody ApprovalRecords approvalRecords) {
+        approvalRecords.setStepId(101);
         approvalRecordsService.save(approvalRecords);
         return Result.OK("添加成功！");
     }

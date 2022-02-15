@@ -4,8 +4,8 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="报表类型" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalType">
-              <j-dict-select-tag type="list" v-model="model.approvalType" dictCode="approval_type" placeholder="请选择报表类型" />
+            <a-form-model-item label="文件标题" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="title">
+              <a-input v-model="model.title" placeholder="请输入文件标题"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -14,28 +14,28 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="发件单位" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="unitName">
-              <a-input v-model="model.unitName" placeholder="请输入发件单位"  ></a-input>
+            <a-form-model-item label="发件人" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="sender">
+              <j-dict-select-tag type="list" v-model="model.sender" dictCode="sender" placeholder="请选择发件人" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="文号" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="uid">
+              <a-input v-model="model.uid" placeholder="请输入文号"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="收件时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="receiptTime">
-              <j-date placeholder="请选择收件时间"  v-model="model.receiptTime" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
+              <j-date placeholder="请选择收件时间" v-model="model.receiptTime"  style="width: 100%" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="报表文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileSource">
+              <j-upload v-model="model.fileSource"   ></j-upload>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="审批意见" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalOpinion">
               <a-textarea v-model="model.approvalOpinion" rows="4" placeholder="请输入审批意见" />
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="返回时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="returnTime">
-              <j-date placeholder="请选择返回时间"  v-model="model.returnTime" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="报审文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileSource">
-              <j-upload v-model="model.fileSource"   ></j-upload>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -50,7 +50,7 @@
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
-    name: 'ApprovalRecordsForm',
+    name: 'OutRecordForm',
     components: {
     },
     props: {
@@ -77,9 +77,9 @@
         validatorRules: {
         },
         url: {
-          add: "/engineer/approvalRecords/add",
-          edit: "/engineer/approvalRecords/edit",
-          queryById: "/engineer/approvalRecords/queryById"
+          add: "/engineer/outRecord/add",
+          edit: "/engineer/outRecord/edit",
+          queryById: "/engineer/outRecord/queryById"
         }
       }
     },

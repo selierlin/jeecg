@@ -4,42 +4,6 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="报表类型">
-              <j-dict-select-tag placeholder="请选择报表类型" v-model="queryParam.inspectionType" dictCode="inspection_type"/>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="报验人">
-              <j-dict-select-tag placeholder="请选择报验人" v-model="queryParam.reportor" dictCode="contractor"/>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :xl="10" :lg="11" :md="12" :sm="24">
-              <a-form-item label="报验时间">
-                <j-date placeholder="请选择开始日期" class="query-group-cust" v-model="queryParam.reportTime_begin"></j-date>
-                <span class="query-group-split-cust"></span>
-                <j-date placeholder="请选择结束日期" class="query-group-cust" v-model="queryParam.reportTime_end"></j-date>
-              </a-form-item>
-            </a-col>
-            <a-col :xl="10" :lg="11" :md="12" :sm="24">
-              <a-form-item label="验收时间">
-                <j-date placeholder="请选择开始日期" class="query-group-cust" v-model="queryParam.acceptTime_begin"></j-date>
-                <span class="query-group-split-cust"></span>
-                <j-date placeholder="请选择结束日期" class="query-group-cust" v-model="queryParam.acceptTime_end"></j-date>
-              </a-form-item>
-            </a-col>
-          </template>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -48,7 +12,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('报验记录')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('外部文件记录')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -125,7 +89,7 @@
       </a-table>
     </div>
 
-    <inspection-records-modal ref="modalForm" @ok="modalFormOk"></inspection-records-modal>
+    <out-record-modal ref="modalForm" @ok="modalFormOk"></out-record-modal>
   </a-card>
 </template>
 
@@ -134,18 +98,18 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import InspectionRecordsModal from './modules/InspectionRecordsModal'
+  import OutRecordModal from './modules/OutRecordModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
-    name: 'InspectionRecordsList',
+    name: 'OutRecordList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      InspectionRecordsModal
+      OutRecordModal
     },
     data () {
       return {
-        description: '报验记录管理页面',
+        description: '外部文件记录管理页面',
         // 表头
         columns: [
           {
@@ -159,56 +123,58 @@
             }
           },
           {
-            title:'报表类型',
+            title:'文件标题',
             align:"center",
-            dataIndex: 'inspectionType_dictText'
+            dataIndex: 'title'
           },
           {
-            title:'报验内容',
+            title:'主要内容',
             align:"center",
-            dataIndex: 'reportContent'
+            dataIndex: 'content'
           },
           {
-            title:'报验人',
+            title:'发件人',
             align:"center",
-            dataIndex: 'reportor_dictText'
+            dataIndex: 'sender_dictText'
           },
           {
-            title:'报验时间',
+            title:'文号',
             align:"center",
-            dataIndex: 'reportTime',
+            dataIndex: 'uid'
+          },
+          {
+            title:'收件时间',
+            align:"center",
+            dataIndex: 'receiptTime',
             customRender:function (text) {
               return !text?"":(text.length>10?text.substr(0,10):text)
             }
           },
           {
-            title:'验收人',
+            title:'来源',
             align:"center",
-            dataIndex: 'createBy'
-          },
-          {
-            title:'验收时间',
-            align:"center",
-            dataIndex: 'acceptTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
-          },
-          {
-            title:'验收结果',
-            align:"center",
-            dataIndex: 'acceptResult_dictText'
-          },
-          {
-            title:'备注',
-            align:"center",
-            dataIndex: 'remark'
+            dataIndex: 'source'
           },
           {
             title:'报表文件',
             align:"center",
             dataIndex: 'fileSource',
             scopedSlots: {customRender: 'fileSlot'}
+          },
+          {
+            title:'处理结果',
+            align:"center",
+            dataIndex: 'state_dictText'
+          },
+          {
+            title:'步骤',
+            align:"center",
+            dataIndex: 'stepId_dictText'
+          },
+          {
+            title:'审批意见',
+            align:"center",
+            dataIndex: 'approvalOpinion'
           },
           {
             title: '操作',
@@ -220,11 +186,11 @@
           }
         ],
         url: {
-          list: "/engineer/inspectionRecords/list",
-          delete: "/engineer/inspectionRecords/delete",
-          deleteBatch: "/engineer/inspectionRecords/deleteBatch",
-          exportXlsUrl: "/engineer/inspectionRecords/exportXls",
-          importExcelUrl: "engineer/inspectionRecords/importExcel",
+          list: "/engineer/outRecord/list",
+          delete: "/engineer/outRecord/delete",
+          deleteBatch: "/engineer/outRecord/deleteBatch",
+          exportXlsUrl: "/engineer/outRecord/exportXls",
+          importExcelUrl: "engineer/outRecord/importExcel",
           
         },
         dictOptions:{},
@@ -244,15 +210,16 @@
       },
       getSuperFieldList(){
         let fieldList=[];
-        fieldList.push({type:'string',value:'inspectionType',text:'报表类型',dictCode:'inspection_type'})
-        fieldList.push({type:'string',value:'reportContent',text:'报验内容',dictCode:''})
-        fieldList.push({type:'string',value:'reportor',text:'报验人',dictCode:'contractor'})
-        fieldList.push({type:'date',value:'reportTime',text:'报验时间'})
-        fieldList.push({type:'string',value:'createBy',text:'验收人',dictCode:''})
-        fieldList.push({type:'date',value:'acceptTime',text:'验收时间'})
-        fieldList.push({type:'string',value:'acceptResult',text:'验收结果',dictCode:'check_result'})
-        fieldList.push({type:'string',value:'remark',text:'备注',dictCode:''})
+        fieldList.push({type:'string',value:'title',text:'文件标题',dictCode:''})
+        fieldList.push({type:'string',value:'content',text:'主要内容',dictCode:''})
+        fieldList.push({type:'string',value:'sender',text:'发件人',dictCode:'sender'})
+        fieldList.push({type:'string',value:'uid',text:'文号',dictCode:''})
+        fieldList.push({type:'date',value:'receiptTime',text:'收件时间'})
+        fieldList.push({type:'string',value:'source',text:'来源',dictCode:''})
         fieldList.push({type:'string',value:'fileSource',text:'报表文件',dictCode:''})
+        fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:'deal_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
         this.superFieldList = fieldList
       }
     }
