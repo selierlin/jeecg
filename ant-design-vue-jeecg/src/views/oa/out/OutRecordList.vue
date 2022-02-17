@@ -69,6 +69,10 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical" />
+          <a @click="handleAudit(record)">审批</a>
+          <a-divider type="vertical" />
+          <a @click="handleLog(record.id)">查看日志</a>
 
           <a-divider type="vertical" />
           <a-dropdown>
@@ -90,6 +94,7 @@
     </div>
 
     <out-record-modal ref="modalForm" @ok="modalFormOk"></out-record-modal>
+    <out-record-modal1 ref="modalForm1"></out-record-modal1>
   </a-card>
 </template>
 
@@ -99,13 +104,17 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import OutRecordModal from './modules/OutRecordModal'
+  import OutRecordModal1 from './modules/OutRecordModal1'
+  import WorkFlowLogModal from './modules/WorkFlowLogModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
     name: 'OutRecordList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      OutRecordModal
+      OutRecordModal,
+      OutRecordModal1,
+      WorkFlowLogModal,
     },
     data () {
       return {
@@ -177,6 +186,16 @@
             dataIndex: 'approvalOpinion'
           },
           {
+            title:'创建人',
+            align:"center",
+            dataIndex: 'createBy'
+          },
+          {
+            title:'创建日期',
+            align:"center",
+            dataIndex: 'createTime'
+          },
+          {
             title: '操作',
             dataIndex: 'action',
             align:"center",
@@ -191,7 +210,8 @@
           deleteBatch: "/engineer/outRecord/deleteBatch",
           exportXlsUrl: "/engineer/outRecord/exportXls",
           importExcelUrl: "engineer/outRecord/importExcel",
-          
+          audit: 'engineer/outRecord/audit',
+          log: 'engineer/outRecord/queryByTaskId',
         },
         dictOptions:{},
         superFieldList:[],
@@ -208,6 +228,23 @@
     methods: {
       initDictConfig(){
       },
+      handleAudit(obj) {
+        this.$refs.modalForm1.audit(obj)
+      },
+      handleLog(id) {
+        axios
+          .get(`${this.url.log}?taskId=${id}`, {
+            taskId: id,
+          })
+          .then((res) => {
+            if (res.success) {
+              this.logData = res.result
+              this.logVisible = true
+            }else{
+              this.$message.warn('服务器出现错误');
+            }
+          })
+      },
       getSuperFieldList(){
         let fieldList=[];
         fieldList.push({type:'string',value:'title',text:'文件标题',dictCode:''})
@@ -220,6 +257,8 @@
         fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:'deal_state'})
         fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
         fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
+        fieldList.push({type:'string',value:'createBy',text:'创建人',dictCode:''})
+        fieldList.push({type:'datetime',value:'createTime',text:'创建日期'})
         this.superFieldList = fieldList
       }
     }
