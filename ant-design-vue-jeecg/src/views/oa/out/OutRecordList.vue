@@ -92,7 +92,9 @@
 
       </a-table>
     </div>
-
+    <a-modal :visible="logVisible" @cancel="logVisible = false" @ok="logVisible = false" width="60%">
+      <work-flow-log-modal :data="logData" ref="modalLogForm"></work-flow-log-modal>
+    </a-modal>
     <out-record-modal ref="modalForm" @ok="modalFormOk"></out-record-modal>
     <out-record-modal1 ref="modalForm1"></out-record-modal1>
   </a-card>
@@ -107,6 +109,7 @@
   import OutRecordModal1 from './modules/OutRecordModal1'
   import WorkFlowLogModal from './modules/WorkFlowLogModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+  import { axios } from '@/utils/request'
 
   export default {
     name: 'OutRecordList',
@@ -119,6 +122,8 @@
     data () {
       return {
         description: '外部文件记录管理页面',
+        logVisible: false,
+        logData: [],
         // 表头
         columns: [
           {
@@ -211,7 +216,7 @@
           exportXlsUrl: "/engineer/outRecord/exportXls",
           importExcelUrl: "engineer/outRecord/importExcel",
           audit: 'engineer/outRecord/audit',
-          log: 'engineer/outRecord/queryByTaskId',
+          log: 'engineer/workFlowLog/queryByTaskId',
         },
         dictOptions:{},
         superFieldList:[],

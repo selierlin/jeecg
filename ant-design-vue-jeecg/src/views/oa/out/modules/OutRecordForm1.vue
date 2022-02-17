@@ -4,33 +4,28 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="文件标题" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="title">
-              <a-input v-model="model.title" placeholder="请输入文件标题"  ></a-input>
+            <a-form-model-item label="文件标题1" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="title">
+              <a-input disabled v-model="model.title" placeholder="请输入文件标题"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="主要内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="content">
-              <a-textarea v-model="model.content" rows="4" placeholder="请输入主要内容" />
+              <a-textarea disabled v-model="model.content" rows="4" placeholder="请输入主要内容" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="发件人" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="sender">
-              <j-dict-select-tag type="list" v-model="model.sender" dictCode="sender" placeholder="请选择发件人" />
+              <j-dict-select-tag disabled type="list" v-model="model.sender" dictCode="sender" placeholder="请选择发件人" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="文号" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="uid">
-              <a-input v-model="model.uid" placeholder="请输入文号"  ></a-input>
+              <a-input disabled v-model="model.uid" placeholder="请输入文号"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="收件时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="receiptTime">
-              <j-date placeholder="请选择收件时间" v-model="model.receiptTime"  style="width: 100%" />
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="报表文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileSource">
-              <j-upload v-model="model.fileSource"   ></j-upload>
+              <j-date disabled placeholder="请选择收件时间" v-model="model.receiptTime"  style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -46,7 +41,7 @@
 
 <script>
 
-  import { httpAction, getAction } from '@/api/manage'
+  import { httpAction, putAction } from '@/api/manage'
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
@@ -79,6 +74,7 @@
         url: {
           add: "/engineer/outRecord/add",
           edit: "/engineer/outRecord/edit",
+          audit: "/engineer/outRecord/audit",
           queryById: "/engineer/outRecord/queryById"
         }
       }
@@ -96,26 +92,24 @@
       add () {
         this.edit(this.modelDefault);
       },
+      audit (record) {
+        console.log("abc");
+        this.model = Object.assign({}, record);
+        this.visible = true;
+      },
       edit (record) {
         this.model = Object.assign({}, record);
         this.visible = true;
       },
-      submitForm () {
+      submitForm (isPass) {
         const that = this;
         // 触发表单验证
         this.$refs.form.validate(valid => {
           if (valid) {
             that.confirmLoading = true;
             let httpurl = '';
-            let method = '';
-            if(!this.model.id){
-              httpurl+=this.url.add;
-              method = 'post';
-            }else{
-              httpurl+=this.url.edit;
-               method = 'put';
-            }
-            httpAction(httpurl,this.model,method).then((res)=>{
+            httpurl+=this.url.audit;
+            putAction(httpurl,{id:this.model.id,pass:isPass,approvalOpinion:this.model.approvalOpinion}).then((res)=>{
               if(res.success){
                 that.$message.success(res.message);
                 that.$emit('ok');

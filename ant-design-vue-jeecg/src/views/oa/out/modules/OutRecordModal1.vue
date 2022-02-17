@@ -22,7 +22,7 @@
 
   import OutRecordForm1 from './OutRecordForm1'
   export default {
-    name: 'OutRecordForm1',
+    name: 'OutRecordModal1',
     components: {
       OutRecordForm1,
     },
@@ -71,7 +71,7 @@
         this.previewVisible = false;
       },
       handleReject () {
-        this.$refs.realForm1.submitForm(0);
+        this.$refs.realForm1.submitForm(2);
         this.submitCallback();
       }
     }

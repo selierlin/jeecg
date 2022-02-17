@@ -9,9 +9,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.demo.engineer.entity.ApprovalRecords;
 import org.jeecg.modules.demo.engineer.entity.OutRecord;
 import org.jeecg.modules.demo.engineer.service.IOutRecordService;
 
@@ -168,5 +171,25 @@ public class OutRecordController extends JeecgController<OutRecord, IOutRecordSe
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, OutRecord.class);
     }
+
+	 /**
+	  * 外部
+	  *
+	  * @param outRecord 外部记录
+	  * @return
+	  */
+	 @AutoLog(value = "外部记录-外部")
+	 @ApiOperation(value = "外部记录-外部", notes = "外部记录-外部")
+	 @PutMapping(value = "/audit")
+	 public Result<?> audit(@RequestBody OutRecord outRecord) {
+		 String id = outRecord.getId();
+		 Integer isPass = outRecord.getPass();
+		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
+			 return Result.error("参数校验失败");
+		 }
+		 return outRecordService.audit(id, isPass, outRecord.getApprovalOpinion());
+	 }
+
+
 
 }
