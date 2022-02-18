@@ -71,7 +71,7 @@
         this.previewVisible = false;
       },
       handleReject () {
-        this.$refs.realForm1.submitForm(0);
+        this.$refs.realForm1.submitForm(2);
         this.submitCallback();
       }
     }

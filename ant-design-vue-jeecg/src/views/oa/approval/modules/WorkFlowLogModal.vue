@@ -34,6 +34,9 @@ const columns = [
     title: '意见',
     key: 'isPass',
     dataIndex: 'isPass',
+    customRender:function (t,r,index) {
+      return t==1?"同意":"不同意"
+    }
   },
   {
     title: '备注',
