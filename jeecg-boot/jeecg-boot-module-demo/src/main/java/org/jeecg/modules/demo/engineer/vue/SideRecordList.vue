@@ -165,6 +165,26 @@
             scopedSlots: {customRender: 'fileSlot'}
           },
           {
+            title:'状态',
+            align:"center",
+            dataIndex: 'state_dictText'
+          },
+          {
+            title:'步骤',
+            align:"center",
+            dataIndex: 'stepId_dictText'
+          },
+          {
+            title:'申请人',
+            align:"center",
+            dataIndex: 'createBy'
+          },
+          {
+            title:'申请日期',
+            align:"center",
+            dataIndex: 'createTime'
+          },
+          {
             title: '操作',
             dataIndex: 'action',
             align:"center",
@@ -205,6 +225,11 @@
         fieldList.push({type:'string',value:'abnormal',text:'有无异常',dictCode:'abnormal'})
         fieldList.push({type:'string',value:'sideUser',text:'旁站人',dictCode:''})
         fieldList.push({type:'string',value:'sideFile',text:'文件',dictCode:''})
+        fieldList.push({type:'int',value:'state',text:'状态',dictCode:'flow_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
+        fieldList.push({type:'string',value:'createBy',text:'申请人',dictCode:''})
+        fieldList.push({type:'datetime',value:'createTime',text:'申请日期'})
         this.superFieldList = fieldList
       }
     }

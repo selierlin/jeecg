@@ -35,14 +35,6 @@ public class SideRecord implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private java.lang.String id;
-	/**创建人*/
-    @ApiModelProperty(value = "创建人")
-    private java.lang.String createBy;
-	/**创建日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建日期")
-    private java.util.Date createTime;
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
     private java.lang.String updateBy;
@@ -87,4 +79,26 @@ public class SideRecord implements Serializable {
 	@Excel(name = "文件", width = 15)
     @ApiModelProperty(value = "文件")
     private java.lang.String sideFile;
+	/**状态*/
+	@Excel(name = "状态", width = 15, dicCode = "flow_state")
+	@Dict(dicCode = "flow_state")
+    @ApiModelProperty(value = "状态")
+    private java.lang.Integer state;
+	/**步骤*/
+	@Excel(name = "步骤", width = 15, dictTable = "work_flow", dicText = "step_name", dicCode = "step_id")
+	@Dict(dictTable = "work_flow", dicText = "step_name", dicCode = "step_id")
+    @ApiModelProperty(value = "步骤")
+    private java.lang.Integer stepId;
+	/**审批意见*/
+	@Excel(name = "审批意见", width = 15)
+    @ApiModelProperty(value = "审批意见")
+    private java.lang.String approvalOpinion;
+	/**申请人*/
+    @ApiModelProperty(value = "申请人")
+    private java.lang.String createBy;
+	/**申请日期*/
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "申请日期")
+    private java.util.Date createTime;
 }

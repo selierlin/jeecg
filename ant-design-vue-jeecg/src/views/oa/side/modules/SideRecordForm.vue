@@ -38,6 +38,11 @@
               <j-upload v-model="model.sideFile"   ></j-upload>
             </a-form-model-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="审批意见" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalOpinion">
+              <a-textarea v-model="model.approvalOpinion" rows="4" placeholder="请输入审批意见" />
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </j-form-container>
