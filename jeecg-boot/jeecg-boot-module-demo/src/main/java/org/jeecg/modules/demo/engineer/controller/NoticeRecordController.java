@@ -82,6 +82,7 @@ public class NoticeRecordController extends JeecgController<NoticeRecord, INotic
 	@ApiOperation(value=" 通知单-添加", notes=" 通知单-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody NoticeRecord noticeRecord) {
+		noticeRecord.setStepId(301);
 		noticeRecordService.save(noticeRecord);
 		return Result.OK("添加成功！");
 	}
