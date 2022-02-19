@@ -69,7 +69,10 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-
+          <a-divider type="vertical" />
+          <a @click="handleAudit(record)">审批</a>
+          <a-divider type="vertical" />
+          <a @click="handleLog(record.id)">查看日志</a>
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -89,7 +92,11 @@
       </a-table>
     </div>
 
+    <a-modal :visible="logVisible" @cancel="logVisible = false" @ok="logVisible = false" width="60%">
+      <work-flow-log-modal :data="logData" ref="modalLogForm"></work-flow-log-modal>
+    </a-modal>
     <side-record-modal ref="modalForm" @ok="modalFormOk"></side-record-modal>
+    <side-record-modal1 ref="modalForm1"></side-record-modal1>
   </a-card>
 </template>
 
@@ -99,17 +106,24 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import SideRecordModal from './modules/SideRecordModal'
+  import SideRecordModal1 from './modules/SideRecordModal1'
+  import WorkFlowLogModal from './modules/WorkFlowLogModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+  import { axios } from '@/utils/request'
 
   export default {
     name: 'SideRecordList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      SideRecordModal
+      SideRecordModal,
+      SideRecordModal1,
+      WorkFlowLogModal
     },
     data () {
       return {
         description: '旁站记录管理页面',
+        logVisible: false,
+        logData: [],
         // 表头
         columns: [
           {
@@ -199,7 +213,8 @@
           deleteBatch: "/engineer/sideRecord/deleteBatch",
           exportXlsUrl: "/engineer/sideRecord/exportXls",
           importExcelUrl: "engineer/sideRecord/importExcel",
-          
+          audit: 'engineer/approvalRecords/audit',
+          log: 'engineer/workFlowLog/queryByTaskId',
         },
         dictOptions:{},
         superFieldList:[],
@@ -215,6 +230,23 @@
     },
     methods: {
       initDictConfig(){
+      },
+      handleAudit(obj) {
+        this.$refs.modalForm1.audit(obj)
+      },
+      handleLog(id) {
+        axios
+          .get(`${this.url.log}?taskId=${id}`, {
+            taskId: id,
+          })
+          .then((res) => {
+            if (res.success) {
+              this.logData = res.result
+              this.logVisible = true
+            }else{
+              this.$message.warn('服务器出现错误');
+            }
+          })
       },
       getSuperFieldList(){
         let fieldList=[];
