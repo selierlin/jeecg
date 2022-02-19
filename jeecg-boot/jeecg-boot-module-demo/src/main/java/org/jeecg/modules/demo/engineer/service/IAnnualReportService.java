@@ -1,5 +1,6 @@
 package org.jeecg.modules.demo.engineer.service;
 
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.AnnualReport;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IAnnualReportService extends IService<AnnualReport> {
 
+    Result<?> audit(String id, Integer isPass, String approvalOpinion);
 }

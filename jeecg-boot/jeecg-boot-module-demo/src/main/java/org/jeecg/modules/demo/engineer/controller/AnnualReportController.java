@@ -9,10 +9,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.demo.engineer.entity.AnnualReport;
+import org.jeecg.modules.demo.engineer.entity.SideRecord;
 import org.jeecg.modules.demo.engineer.service.IAnnualReportService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -82,6 +85,7 @@ public class AnnualReportController extends JeecgController<AnnualReport, IAnnua
 	@ApiOperation(value="月季年报-添加", notes="月季年报-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody AnnualReport annualReport) {
+		annualReport.setStepId(301);
 		annualReportService.save(annualReport);
 		return Result.OK("添加成功！");
 	}
@@ -168,4 +172,21 @@ public class AnnualReportController extends JeecgController<AnnualReport, IAnnua
         return super.importExcel(request, response, AnnualReport.class);
     }
 
+	 /**
+	  * 审批
+	  *
+	  * @param record 记录
+	  * @return
+	  */
+	 @AutoLog(value = "旁听记录-旁听")
+	 @ApiOperation(value = "旁听记录-旁听", notes = "旁听记录-审批")
+	 @PutMapping(value = "/audit")
+	 public Result<?> audit(@RequestBody AnnualReport record) {
+		 String id = record.getId();
+		 Integer isPass = record.getPass();
+		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
+			 return Result.error("参数校验失败");
+		 }
+		 return annualReportService.audit(id, isPass, record.getApprovalOpinion());
+	 }
 }

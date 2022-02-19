@@ -5,12 +5,17 @@
         <a-row>
           <a-col :span="24">
             <a-form-model-item label="标题" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="title">
-              <a-input v-model="model.title" placeholder="请输入标题"  ></a-input>
+              <a-input disabled v-model="model.title" placeholder="请输入标题"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="附件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileSource">
-              <j-upload v-model="model.fileSource"   ></j-upload>
+              <j-upload diabled v-model="model.fileSource"   ></j-upload>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="审批意见" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalOpinion">
+              <a-textarea v-model="model.approvalOpinion" rows="4" placeholder="请输入审批意见" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -54,6 +59,7 @@
         url: {
           add: "/engineer/annualReport/add",
           edit: "/engineer/annualReport/edit",
+          audit: "/engineer/annualReport/audit",
           queryById: "/engineer/annualReport/queryById"
         }
       }
@@ -75,22 +81,20 @@
         this.model = Object.assign({}, record);
         this.visible = true;
       },
-      submitForm () {
+      audit (record) {
+        console.log("abc");
+        this.model = Object.assign({}, record);
+        this.visible = true;
+      },
+      submitForm (isPass) {
         const that = this;
         // 触发表单验证
         this.$refs.form.validate(valid => {
           if (valid) {
             that.confirmLoading = true;
             let httpurl = '';
-            let method = '';
-            if(!this.model.id){
-              httpurl+=this.url.add;
-              method = 'post';
-            }else{
-              httpurl+=this.url.edit;
-               method = 'put';
-            }
-            httpAction(httpurl,this.model,method).then((res)=>{
+            httpurl+=this.url.audit;
+            putAction(httpurl,{id:this.model.id,pass:isPass,approvalOpinion:this.model.approvalOpinion}).then((res)=>{
               if(res.success){
                 that.$message.success(res.message);
                 that.$emit('ok');

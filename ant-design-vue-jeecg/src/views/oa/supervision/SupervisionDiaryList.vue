@@ -69,7 +69,11 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-
+          <a-divider type="vertical" />
+          <a @click="handleAudit(record)">审批</a>
+          <a-divider type="vertical" />
+          <a @click="handleLog(record.id)">查看日志</a>
+          
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -88,8 +92,11 @@
 
       </a-table>
     </div>
-
+    <a-modal :visible="logVisible" @cancel="logVisible = false" @ok="logVisible = false" width="60%">
+      <work-flow-log-modal :data="logData" ref="modalLogForm"></work-flow-log-modal>
+    </a-modal>
     <supervision-diary-modal ref="modalForm" @ok="modalFormOk"></supervision-diary-modal>
+    <supervision-diary-modal1 ref="modalForm1" ></supervision-diary-modal1>
   </a-card>
 </template>
 
@@ -99,17 +106,23 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import SupervisionDiaryModal from './modules/SupervisionDiaryModal'
+  import SupervisionDiaryModal1 from './modules/SupervisionDiaryModal1'
+  import WorkFlowLogModal from './modules/WorkFlowLogModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
-
+  import { axios } from '@/utils/request'
   export default {
     name: 'SupervisionDiaryList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      SupervisionDiaryModal
+      SupervisionDiaryModal,
+      SupervisionDiaryModal1,
+      WorkFlowLogModal
     },
     data () {
       return {
         description: '监理日记/志管理页面',
+        logVisible: false,
+        logData: [],
         // 表头
         columns: [
           {
@@ -205,6 +218,8 @@
           deleteBatch: "/engineer/supervisionDiary/deleteBatch",
           exportXlsUrl: "/engineer/supervisionDiary/exportXls",
           importExcelUrl: "engineer/supervisionDiary/importExcel",
+          audit: 'engineer/supervisionDiary/audit',
+          log: 'engineer/workFlowLog/queryByTaskId',
           
         },
         dictOptions:{},
@@ -221,6 +236,23 @@
     },
     methods: {
       initDictConfig(){
+      },
+      handleAudit(obj) {
+        this.$refs.modalForm1.audit(obj)
+      },
+      handleLog(id) {
+        axios
+          .get(`${this.url.log}?taskId=${id}`, {
+            taskId: id,
+          })
+          .then((res) => {
+            if (res.success) {
+              this.logData = res.result
+              this.logVisible = true
+            }else{
+              this.$message.warn('服务器出现错误');
+            }
+          })
       },
       getSuperFieldList(){
         let fieldList=[];

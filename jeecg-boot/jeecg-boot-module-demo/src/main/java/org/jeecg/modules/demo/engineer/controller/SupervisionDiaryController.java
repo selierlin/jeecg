@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
@@ -82,6 +84,7 @@ public class SupervisionDiaryController extends JeecgController<SupervisionDiary
 	@ApiOperation(value="监理日记/志-添加", notes="监理日记/志-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody SupervisionDiary supervisionDiary) {
+		supervisionDiary.setStepId(301);
 		supervisionDiaryService.save(supervisionDiary);
 		return Result.OK("添加成功！");
 	}
@@ -168,4 +171,21 @@ public class SupervisionDiaryController extends JeecgController<SupervisionDiary
         return super.importExcel(request, response, SupervisionDiary.class);
     }
 
+	 /**
+	  * 审批
+	  *
+	  * @param record 记录
+	  * @return
+	  */
+	 @AutoLog(value = "旁听记录-旁听")
+	 @ApiOperation(value = "旁听记录-旁听", notes = "旁听记录-审批")
+	 @PutMapping(value = "/audit")
+	 public Result<?> audit(@RequestBody SupervisionDiary record) {
+		 String id = record.getId();
+		 Integer isPass = record.getPass();
+		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
+			 return Result.error("参数校验失败");
+		 }
+		 return supervisionDiaryService.audit(id, isPass, record.getApprovalOpinion());
+	 }
 }

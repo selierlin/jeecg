@@ -4,10 +4,16 @@
     :width="width"
     :visible="visible"
     switchFullscreen
-    @ok="handleOk"
-    :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
-    cancelText="关闭">
+    >
+    <template slot="footer">
+        <a-button key="back" @click="handleReject">
+          拒绝
+        </a-button>
+        <a-button key="submit" type="primary" @click="handleOk">
+          通过
+        </a-button>
+      </template>
     <annual-report-form1 ref="realForm1" :disabled="disableSubmit"></annual-report-form1>
   </j-modal>
 </template>
@@ -46,11 +52,23 @@
         this.visible = false;
       },
       handleOk () {
-        this.$refs.realForm.submitForm();
+        this.$refs.realForm1.submitForm(1);
+        this.submitCallback();
+      },
+      handleReject () {
+        this.$refs.realForm1.submitForm(2);
+        this.submitCallback();
       },
       submitCallback(){
         this.$emit('ok');
         this.visible = false;
+      },
+      audit (record) {
+        this.visible=true
+        console.log("111");
+        this.$nextTick(()=>{
+          this.$refs.realForm1.audit(record);
+        })
       },
       handleCancel () {
         this.close()

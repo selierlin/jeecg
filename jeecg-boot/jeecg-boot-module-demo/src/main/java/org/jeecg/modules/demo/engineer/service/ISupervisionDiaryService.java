@@ -1,5 +1,6 @@
 package org.jeecg.modules.demo.engineer.service;
 
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.SupervisionDiary;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -11,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISupervisionDiaryService extends IService<SupervisionDiary> {
 
+    Result<?> audit(String id, Integer isPass, String approvalOpinion);
 }
