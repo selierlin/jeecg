@@ -9,10 +9,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.demo.engineer.entity.NoticeRecord;
+import org.jeecg.modules.demo.engineer.entity.SideRecord;
 import org.jeecg.modules.demo.engineer.service.INoticeRecordService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -169,4 +172,21 @@ public class NoticeRecordController extends JeecgController<NoticeRecord, INotic
         return super.importExcel(request, response, NoticeRecord.class);
     }
 
+	 /**
+	  * 审批
+	  *
+	  * @param record 记录
+	  * @return
+	  */
+	 @AutoLog(value = "记录-")
+	 @ApiOperation(value = "记录-", notes = "记录-审批")
+	 @PutMapping(value = "/audit")
+	 public Result<?> audit(@RequestBody SideRecord record) {
+		 String id = record.getId();
+		 Integer isPass = record.getPass();
+		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
+			 return Result.error("参数校验失败");
+		 }
+		 return noticeRecordService.audit(id, isPass, record.getApprovalOpinion());
+	 }
 }

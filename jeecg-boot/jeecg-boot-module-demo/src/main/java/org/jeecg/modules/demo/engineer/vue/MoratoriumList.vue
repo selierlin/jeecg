@@ -233,10 +233,10 @@
         fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
         fieldList.push({type:'string',value:'deliveryReceip',text:'送达回执',dictCode:''})
         fieldList.push({type:'string',value:'reply',text:'回复',dictCode:''})
-        fieldList.push({type:'string',value:'closed',text:'闭合状态',dictCode:'closed'})
+        fieldList.push({type:'int',value:'closed',text:'闭合状态',dictCode:'closed'})
         fieldList.push({type:'string',value:'source',text:'来源',dictCode:''})
-        fieldList.push({type:'string',value:'state',text:'状态',dictCode:'flow_state'})
-        fieldList.push({type:'string',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'int',value:'state',text:'状态',dictCode:'flow_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
         this.superFieldList = fieldList
       }
     }

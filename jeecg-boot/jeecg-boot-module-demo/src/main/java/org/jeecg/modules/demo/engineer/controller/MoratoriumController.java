@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
@@ -82,6 +84,7 @@ public class MoratoriumController extends JeecgController<Moratorium, IMoratoriu
 	@ApiOperation(value="暂停令-添加", notes="暂停令-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Moratorium moratorium) {
+		moratorium.setStepId(301);
 		moratoriumService.save(moratorium);
 		return Result.OK("添加成功！");
 	}
@@ -168,4 +171,21 @@ public class MoratoriumController extends JeecgController<Moratorium, IMoratoriu
         return super.importExcel(request, response, Moratorium.class);
     }
 
+	 /**
+	  * 审批
+	  *
+	  * @param record 记录
+	  * @return
+	  */
+	 @AutoLog(value = "记录-")
+	 @ApiOperation(value = "记录-", notes = "记录-审批")
+	 @PutMapping(value = "/audit")
+	 public Result<?> audit(@RequestBody Moratorium record) {
+		 String id = record.getId();
+		 Integer isPass = record.getPass();
+		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
+			 return Result.error("参数校验失败");
+		 }
+		 return moratoriumService.audit(id, isPass, record.getApprovalOpinion());
+	 }
 }

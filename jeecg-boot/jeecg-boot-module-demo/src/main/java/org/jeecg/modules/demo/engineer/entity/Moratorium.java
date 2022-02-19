@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -73,7 +74,7 @@ public class Moratorium implements Serializable {
 	@Excel(name = "闭合状态", width = 15, dicCode = "closed")
 	@Dict(dicCode = "closed")
     @ApiModelProperty(value = "闭合状态")
-    private java.lang.String closed;
+    private java.lang.Integer closed;
 	/**来源*/
 	@Excel(name = "来源", width = 15)
     @ApiModelProperty(value = "来源")
@@ -82,12 +83,12 @@ public class Moratorium implements Serializable {
 	@Excel(name = "状态", width = 15, dicCode = "flow_state")
 	@Dict(dicCode = "flow_state")
     @ApiModelProperty(value = "状态")
-    private java.lang.String state;
+    private java.lang.Integer state;
 	/**步骤*/
 	@Excel(name = "步骤", width = 15, dictTable = "work_flow", dicText = "step_name", dicCode = "step_id")
 	@Dict(dictTable = "work_flow", dicText = "step_name", dicCode = "step_id")
     @ApiModelProperty(value = "步骤")
-    private java.lang.String stepId;
+    private java.lang.Integer stepId;
 	/**创建日期*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -101,4 +102,8 @@ public class Moratorium implements Serializable {
 	/**所属部门*/
     @ApiModelProperty(value = "所属部门")
     private java.lang.String sysOrgCode;
+    /**是否通过*/
+    @TableField(exist = false)
+    @ApiModelProperty(value = "是否通过")
+    private java.lang.Integer pass;
 }

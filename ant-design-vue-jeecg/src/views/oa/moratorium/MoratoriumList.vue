@@ -69,7 +69,11 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-
+          <a-divider type="vertical" />
+          <a @click="handleAudit(record)">审批</a>
+          <a-divider type="vertical" />
+          <a @click="handleLog(record.id)">查看日志</a>
+          
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -88,8 +92,11 @@
 
       </a-table>
     </div>
-
+    <a-modal :visible="logVisible" @cancel="logVisible = false" @ok="logVisible = false" width="60%">
+      <work-flow-log-modal :data="logData" ref="modalLogForm"></work-flow-log-modal>
+    </a-modal>
     <moratorium-modal ref="modalForm" @ok="modalFormOk"></moratorium-modal>
+    <moratorium-modal1 ref="modalForm1"></moratorium-modal1>
   </a-card>
 </template>
 
@@ -99,17 +106,24 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import MoratoriumModal from './modules/MoratoriumModal'
+  import MoratoriumModal1 from './modules/MoratoriumModal1'
+  import WorkFlowLogModal from './modules/WorkFlowLogModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+  import { axios } from '@/utils/request'
 
   export default {
     name: 'MoratoriumList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      MoratoriumModal
+      MoratoriumModal,
+      MoratoriumModal1,
+      WorkFlowLogModal
     },
     data () {
       return {
         description: '暂停令管理页面',
+        logVisible: false,
+        logData: [],
         // 表头
         columns: [
           {
@@ -205,6 +219,8 @@
           deleteBatch: "/engineer/moratorium/deleteBatch",
           exportXlsUrl: "/engineer/moratorium/exportXls",
           importExcelUrl: "engineer/moratorium/importExcel",
+          audit: 'engineer/moratorium/audit',
+          log: 'engineer/workFlowLog/queryByTaskId',
           
         },
         dictOptions:{},
@@ -222,6 +238,23 @@
     methods: {
       initDictConfig(){
       },
+      handleAudit(obj) {
+        this.$refs.modalForm1.audit(obj)
+      },
+      handleLog(id) {
+        axios
+          .get(`${this.url.log}?taskId=${id}`, {
+            taskId: id,
+          })
+          .then((res) => {
+            if (res.success) {
+              this.logData = res.result
+              this.logVisible = true
+            }else{
+              this.$message.warn('服务器出现错误');
+            }
+          })
+      },
       getSuperFieldList(){
         let fieldList=[];
         fieldList.push({type:'string',value:'worksite',text:'工点',dictCode:''})
@@ -233,10 +266,10 @@
         fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
         fieldList.push({type:'string',value:'deliveryReceip',text:'送达回执',dictCode:''})
         fieldList.push({type:'string',value:'reply',text:'回复',dictCode:''})
-        fieldList.push({type:'string',value:'closed',text:'闭合状态',dictCode:'closed'})
+        fieldList.push({type:'int',value:'closed',text:'闭合状态',dictCode:'closed'})
         fieldList.push({type:'string',value:'source',text:'来源',dictCode:''})
-        fieldList.push({type:'string',value:'state',text:'状态',dictCode:'flow_state'})
-        fieldList.push({type:'string',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'int',value:'state',text:'状态',dictCode:'flow_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
         this.superFieldList = fieldList
       }
     }
