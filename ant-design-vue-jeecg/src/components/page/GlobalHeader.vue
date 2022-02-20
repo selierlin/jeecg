@@ -17,7 +17,7 @@
         :type="collapsed ? 'menu-unfold' : 'menu-fold'"
         @click="toggle"/>
 
-      <span v-if="device === 'desktop'">欢迎进入 Jeecg-Boot 企业级低代码平台</span>
+      <span v-if="device === 'desktop'">信息化工程监理信息管理系统</span>
       <span v-else>Jeecg-Boot</span>
 
       <user-menu :theme="theme"/>
