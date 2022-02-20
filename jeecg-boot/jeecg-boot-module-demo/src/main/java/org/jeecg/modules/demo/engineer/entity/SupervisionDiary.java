@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 监理日记/志
  * @Author: jeecg-boot
- * @Date:   2022-02-19
+ * @Date:   2022-02-20
  * @Version: V1.0
  */
 @Data
@@ -97,4 +97,66 @@ public class SupervisionDiary implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value = "是否通过")
     private java.lang.Integer pass;
+	/**工程名称*/
+	@Excel(name = "工程名称", width = 15)
+    @ApiModelProperty(value = "工程名称")
+    private java.lang.String projectName;
+	/**密级*/
+	@Excel(name = "密级", width = 15)
+    @ApiModelProperty(value = "密级")
+    private java.lang.String level;
+	/**文档名称*/
+	@Excel(name = "文档名称", width = 15)
+    @ApiModelProperty(value = "文档名称")
+    private java.lang.String fileName;
+	/**保密管理人*/
+	@Excel(name = "保密管理人", width = 15)
+    @ApiModelProperty(value = "保密管理人")
+    private java.lang.String manaName;
+	/**签发时间*/
+	@Excel(name = "签发时间", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @ApiModelProperty(value = "签发时间")
+    private java.util.Date signTime;
+	/**页数*/
+	@Excel(name = "页数", width = 15)
+    @ApiModelProperty(value = "页数")
+    private java.lang.Integer pageNum;
+	/**传阅范围*/
+	@Excel(name = "传阅范围", width = 15)
+    @ApiModelProperty(value = "传阅范围")
+    private java.lang.String readScope;
+	/**签收人*/
+	@Excel(name = "签收人", width = 15)
+    @ApiModelProperty(value = "签收人")
+    private java.lang.String signUser;
+	/**传阅后处理*/
+	@Excel(name = "传阅后处理", width = 15)
+    @ApiModelProperty(value = "传阅后处理")
+    private java.lang.String readDeal;
+	/**处理时间*/
+	@Excel(name = "处理时间", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @ApiModelProperty(value = "处理时间")
+    private java.util.Date dealTime;
+	/**监理单位名称*/
+	@Excel(name = "监理单位名称", width = 15)
+    @ApiModelProperty(value = "监理单位名称")
+    private java.lang.String superName;
+	/**日期*/
+	@Excel(name = "日期", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @ApiModelProperty(value = "日期")
+    private java.util.Date superTime;
+	/**监理人员*/
+	@Excel(name = "监理人员", width = 15)
+    @ApiModelProperty(value = "监理人员")
+    private java.lang.String superUser;
+	/**内容*/
+	@Excel(name = "内容", width = 15)
+    @ApiModelProperty(value = "内容")
+    private java.lang.String content;
 }

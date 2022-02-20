@@ -23,6 +23,76 @@
               <j-upload v-model="model.fileSource"   ></j-upload>
             </a-form-model-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="工程名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="projectName">
+              <a-input v-model="model.projectName" placeholder="请输入工程名称"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="密级" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="level">
+              <a-input v-model="model.level" placeholder="请输入密级"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="文档名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="fileName">
+              <a-input v-model="model.fileName" placeholder="请输入文档名称"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="保密管理人" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="manaName">
+              <a-input v-model="model.manaName" placeholder="请输入保密管理人"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="签发时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="signTime">
+              <j-date placeholder="请选择签发时间" v-model="model.signTime"  style="width: 100%" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="页数" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="pageNum">
+              <a-input-number v-model="model.pageNum" placeholder="请输入页数" style="width: 100%" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="传阅范围" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="readScope">
+              <a-input v-model="model.readScope" placeholder="请输入传阅范围"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="签收人" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="signUser">
+              <a-input v-model="model.signUser" placeholder="请输入签收人"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="传阅后处理" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="readDeal">
+              <a-input v-model="model.readDeal" placeholder="请输入传阅后处理"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="处理时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="dealTime">
+              <j-date placeholder="请选择处理时间" v-model="model.dealTime"  style="width: 100%" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="监理单位名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="superName">
+              <a-input v-model="model.superName" placeholder="请输入监理单位名称"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="日期" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="superTime">
+              <j-date placeholder="请选择日期" v-model="model.superTime"  style="width: 100%" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="监理人员" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="superUser">
+              <a-input v-model="model.superUser" placeholder="请输入监理人员"  ></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="content">
+              <a-textarea v-model="model.content" rows="4" placeholder="请输入内容" />
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </j-form-container>

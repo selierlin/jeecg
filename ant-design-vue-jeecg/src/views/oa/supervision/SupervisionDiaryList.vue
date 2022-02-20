@@ -73,13 +73,16 @@
           <a @click="handleAudit(record)">审批</a>
           <a-divider type="vertical" />
           <a @click="handleLog(record.id)">查看日志</a>
-          
+
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a @click="handlePrint(record.id)">打印</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
@@ -220,7 +223,7 @@
           importExcelUrl: "engineer/supervisionDiary/importExcel",
           audit: 'engineer/supervisionDiary/audit',
           log: 'engineer/workFlowLog/queryByTaskId',
-          
+
         },
         dictOptions:{},
         superFieldList:[],
@@ -239,6 +242,10 @@
       },
       handleAudit(obj) {
         this.$refs.modalForm1.audit(obj)
+      },      
+      handlePrint(id) {
+        let url = window._CONFIG['domianURL'] + '/jmreport/view/655257991467216896?id='+id;
+        window.open(url);
       },
       handleLog(id) {
         axios
@@ -267,6 +274,20 @@
         fieldList.push({type:'string',value:'fileSource',text:'报表文件',dictCode:''})
         fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:'flow_state'})
         fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'string',value:'projectName',text:'工程名称',dictCode:''})
+        fieldList.push({type:'string',value:'level',text:'密级',dictCode:''})
+        fieldList.push({type:'string',value:'fileName',text:'文档名称',dictCode:''})
+        fieldList.push({type:'string',value:'manaName',text:'保密管理人',dictCode:''})
+        fieldList.push({type:'date',value:'signTime',text:'签发时间'})
+        fieldList.push({type:'int',value:'pageNum',text:'页数',dictCode:''})
+        fieldList.push({type:'string',value:'readScope',text:'传阅范围',dictCode:''})
+        fieldList.push({type:'string',value:'signUser',text:'签收人',dictCode:''})
+        fieldList.push({type:'string',value:'readDeal',text:'传阅后处理',dictCode:''})
+        fieldList.push({type:'date',value:'dealTime',text:'处理时间'})
+        fieldList.push({type:'string',value:'superName',text:'监理单位名称',dictCode:''})
+        fieldList.push({type:'date',value:'superTime',text:'日期'})
+        fieldList.push({type:'string',value:'superUser',text:'监理人员',dictCode:''})
+        fieldList.push({type:'string',value:'content',text:'内容',dictCode:''})
         this.superFieldList = fieldList
       }
     }

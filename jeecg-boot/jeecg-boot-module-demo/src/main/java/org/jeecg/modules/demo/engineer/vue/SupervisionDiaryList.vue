@@ -235,6 +235,20 @@
         fieldList.push({type:'string',value:'fileSource',text:'报表文件',dictCode:''})
         fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:'flow_state'})
         fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
+        fieldList.push({type:'string',value:'projectName',text:'工程名称',dictCode:''})
+        fieldList.push({type:'string',value:'level',text:'密级',dictCode:''})
+        fieldList.push({type:'string',value:'fileName',text:'文档名称',dictCode:''})
+        fieldList.push({type:'string',value:'manaName',text:'保密管理人',dictCode:''})
+        fieldList.push({type:'date',value:'signTime',text:'签发时间'})
+        fieldList.push({type:'int',value:'pageNum',text:'页数',dictCode:''})
+        fieldList.push({type:'string',value:'readScope',text:'传阅范围',dictCode:''})
+        fieldList.push({type:'string',value:'signUser',text:'签收人',dictCode:''})
+        fieldList.push({type:'string',value:'readDeal',text:'传阅后处理',dictCode:''})
+        fieldList.push({type:'date',value:'dealTime',text:'处理时间'})
+        fieldList.push({type:'string',value:'superName',text:'监理单位名称',dictCode:''})
+        fieldList.push({type:'date',value:'superTime',text:'日期'})
+        fieldList.push({type:'string',value:'superUser',text:'监理人员',dictCode:''})
+        fieldList.push({type:'string',value:'content',text:'内容',dictCode:''})
         this.superFieldList = fieldList
       }
     }
