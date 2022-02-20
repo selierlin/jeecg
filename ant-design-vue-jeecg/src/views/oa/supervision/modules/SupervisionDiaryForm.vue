@@ -49,8 +49,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="页数" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="pageNum">
-              <a-input-number v-model="model.pageNum" placeholder="请输入页数" style="width: 100%" />
+            <a-form-model-item label="页数" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="pageNums">
+              <a-input-number v-model="model.pageNums" placeholder="请输入页数" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">

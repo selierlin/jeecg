@@ -279,7 +279,7 @@
         fieldList.push({type:'string',value:'fileName',text:'文档名称',dictCode:''})
         fieldList.push({type:'string',value:'manaName',text:'保密管理人',dictCode:''})
         fieldList.push({type:'date',value:'signTime',text:'签发时间'})
-        fieldList.push({type:'int',value:'pageNum',text:'页数',dictCode:''})
+        fieldList.push({type:'int',value:'pageNums',text:'页数',dictCode:''})
         fieldList.push({type:'string',value:'readScope',text:'传阅范围',dictCode:''})
         fieldList.push({type:'string',value:'signUser',text:'签收人',dictCode:''})
         fieldList.push({type:'string',value:'readDeal',text:'传阅后处理',dictCode:''})

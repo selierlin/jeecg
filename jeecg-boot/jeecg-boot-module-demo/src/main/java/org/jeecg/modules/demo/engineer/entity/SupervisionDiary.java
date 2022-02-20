@@ -122,7 +122,7 @@ public class SupervisionDiary implements Serializable {
 	/**页数*/
 	@Excel(name = "页数", width = 15)
     @ApiModelProperty(value = "页数")
-    private java.lang.Integer pageNum;
+    private java.lang.Integer pageNums;
 	/**传阅范围*/
 	@Excel(name = "传阅范围", width = 15)
     @ApiModelProperty(value = "传阅范围")
