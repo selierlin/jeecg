@@ -82,7 +82,7 @@
                 <a @click="handleDetail(record)">详情</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handlePrint(record.id)">打印</a>
+                <a @click="handlePrint(record.id)" v-has="'super:print'">打印</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
