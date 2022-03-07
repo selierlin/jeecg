@@ -8,6 +8,9 @@ import org.jeecg.modules.demo.engineer.entity.WorkFlow;
 import org.jeecg.modules.demo.engineer.mapper.WorkFlowMapper;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @Description: 流程表
@@ -60,5 +63,20 @@ public class WorkFlowServiceImpl extends ServiceImpl<WorkFlowMapper, WorkFlow> i
             return Result.error("找不到流程信息");
         }
         return Result.OK(workFlow);
+    }
+
+    @Override
+    public Result getWorkFlowStep(List<String> roleIds) {
+        QueryWrapper<WorkFlow> flowQueryWrapper = new QueryWrapper<>();
+        flowQueryWrapper.select("step_id");
+        // 管理员
+        if (!roleIds.contains("f6817f48af4fb3af11b9e8bf182f618b")) {
+            flowQueryWrapper.in("role_id", roleIds);
+        }
+        List<Object> stepIds = this.listObjs(flowQueryWrapper);
+        if (CollectionUtils.isEmpty(stepIds)) {
+            return Result.error("该用户没有可审核步骤");
+        }
+        return Result.OK(stepIds);
     }
 }

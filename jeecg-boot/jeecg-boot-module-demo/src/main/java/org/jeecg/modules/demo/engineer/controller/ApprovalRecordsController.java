@@ -66,16 +66,11 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
         if (CollectionUtils.isEmpty(roleIds)) {
             return Result.OK(roleIds);
         }
-        QueryWrapper<WorkFlow> flowQueryWrapper = new QueryWrapper<>();
-        flowQueryWrapper.select("step_id");
-        if (!roleIds.contains("f6817f48af4fb3af11b9e8bf182f618b")) {
-            flowQueryWrapper.in("role_id", roleIds);
+        Result<List<Object>> workFlowStep = workFlowService.getWorkFlowStep(roleIds);
+        if (!workFlowStep.isSuccess()) {
+            return Result.OK(workFlowStep.getMessage());
         }
-        List<Object> stepIds = workFlowService.listObjs(flowQueryWrapper);
-        if (CollectionUtils.isEmpty(stepIds)) {
-            return Result.OK(stepIds);
-        }
-
+        List<Object> stepIds = workFlowStep.getResult();
         QueryWrapper<ApprovalRecords> queryWrapper = QueryGenerator.initQueryWrapper(approvalRecords, req.getParameterMap());
         Page<ApprovalRecords> page = new Page<>(pageNo, pageSize);
         queryWrapper.in("step_id", stepIds);

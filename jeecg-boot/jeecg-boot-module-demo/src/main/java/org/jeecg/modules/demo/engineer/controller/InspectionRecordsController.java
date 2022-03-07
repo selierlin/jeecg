@@ -10,7 +10,9 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.demo.engineer.entity.InspectionRecords;
 import org.jeecg.modules.demo.engineer.service.IInspectionRecordsService;
@@ -20,6 +22,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -27,6 +30,7 @@ import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -49,7 +53,10 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 public class InspectionRecordsController extends JeecgController<InspectionRecords, IInspectionRecordsService> {
 	@Autowired
 	private IInspectionRecordsService inspectionRecordsService;
-	
+	 @Autowired
+	 private ISysBaseAPI sysBaseAPI;
+	 @Autowired
+	 private IWorkFlowService workFlowService;
 	/**
 	 * 分页列表查询
 	 *
@@ -66,7 +73,18 @@ public class InspectionRecordsController extends JeecgController<InspectionRecor
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
+		// 查询当前登录用户可以查看到的步骤
+		List<String> roleIds = sysBaseAPI.getRoleIdsByUsername(JwtUtil.getUserNameByToken(req));
+		if (CollectionUtils.isEmpty(roleIds)) {
+			return Result.OK(roleIds);
+		}
+		Result<List<Object>> workFlowStep = workFlowService.getWorkFlowStep(roleIds);
+		if (!workFlowStep.isSuccess()) {
+			return Result.OK(workFlowStep.getMessage());
+		}
+		List<Object> stepIds = workFlowStep.getResult();
 		QueryWrapper<InspectionRecords> queryWrapper = QueryGenerator.initQueryWrapper(inspectionRecords, req.getParameterMap());
+		queryWrapper.in("step_id", stepIds);
 		Page<InspectionRecords> page = new Page<InspectionRecords>(pageNo, pageSize);
 		IPage<InspectionRecords> pageList = inspectionRecordsService.page(page, queryWrapper);
 		return Result.OK(pageList);

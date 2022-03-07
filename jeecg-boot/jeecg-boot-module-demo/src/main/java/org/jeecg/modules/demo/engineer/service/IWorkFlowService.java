@@ -4,6 +4,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.WorkFlow;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 流程表
  * @Author: jeecg-boot
@@ -24,4 +26,12 @@ public interface IWorkFlowService extends IService<WorkFlow> {
     Result<Integer> getStedId(String id, Integer isPass, Integer stepId, String remark);
 
     Result getWorkFlowByStepId(Integer stepId);
+
+    /**
+     * 查询对应角色可操作的步骤
+     *
+     * @param roleIds 角色集合
+     * @return 可操作的步骤
+     */
+    Result getWorkFlowStep(List<String> roleIds);
 }
