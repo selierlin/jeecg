@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
+import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.modules.demo.engineer.entity.WorkFlow;
 import org.jeecg.modules.demo.engineer.entity.WorkFlowLog;
 import org.jeecg.modules.demo.engineer.mapper.WorkFlowMapper;
@@ -26,6 +27,8 @@ public class WorkFlowServiceImpl extends ServiceImpl<WorkFlowMapper, WorkFlow> i
 
     @Autowired
     IWorkFlowLogService workFlowLogService;
+    @Autowired
+    private ISysBaseAPI sysBaseAPI;
 
     @Override
     public Result getStedId(String id, Integer isPass, Integer stepId, String remark) {
@@ -123,5 +126,28 @@ public class WorkFlowServiceImpl extends ServiceImpl<WorkFlowMapper, WorkFlow> i
         logQueryWrapper.eq("create_by", userName);
         List<Object> objects = workFlowLogService.listObjs(logQueryWrapper);
         return Result.OK(objects);
+    }
+
+    /**
+     * 判断用户是否有权限
+     *
+     * @param userName 用户名称
+     * @return
+     */
+    @Override
+    public Result checkUserRole(String userName, int stepId) {
+        List<String> roleIds = sysBaseAPI.getRoleIdsByUsername(userName);
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return Result.error("请重新登录");
+        }
+        Result<List<Object>> workFlowStep = getWorkFlowStep(roleIds, false);
+        if (!workFlowStep.isSuccess()) {
+            return Result.error(workFlowStep.getMessage());
+        }
+        List<Object> stepIds = workFlowStep.getResult();
+        if (stepIds.contains(stepId)) {
+            return Result.OK();
+        }
+        return Result.error("无审批权限");
     }
 }

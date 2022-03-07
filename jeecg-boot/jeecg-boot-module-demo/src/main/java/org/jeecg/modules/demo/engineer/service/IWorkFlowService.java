@@ -52,4 +52,13 @@ public interface IWorkFlowService extends IService<WorkFlow> {
      * @return
      */
     Result getCompleteTaskId(String userName);
+
+    /**
+     * 校验用户是否有审批权限
+     *
+     * @param userName 用户名
+     * @param stepId   审批步骤
+     * @return
+     */
+    Result checkUserRole(String userName, int stepId);
 }
