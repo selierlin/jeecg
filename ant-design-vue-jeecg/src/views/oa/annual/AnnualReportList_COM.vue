@@ -63,10 +63,6 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-          <a-divider type="vertical" />
-          <a @click="handleAudit(record)">审批</a>
-          <a-divider type="vertical" />
           <a @click="handleLog(record.id)">查看日志</a>
           <a-divider type="vertical" />
           <a-dropdown>
@@ -74,11 +70,6 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
               </a-menu-item>
             </a-menu>
           </a-dropdown>

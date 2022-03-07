@@ -88,6 +88,8 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
+          <a @click="handleAudit(record)">审批</a>
+          <a-divider type="vertical" />
           <a @click="handleLog(record.id)">查看日志</a>
 
           <a-divider type="vertical" />
