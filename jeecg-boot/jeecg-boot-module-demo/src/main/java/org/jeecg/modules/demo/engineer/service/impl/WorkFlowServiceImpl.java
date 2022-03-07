@@ -78,7 +78,7 @@ public class WorkFlowServiceImpl extends ServiceImpl<WorkFlowMapper, WorkFlow> i
      */
     @Override
     public Result getWorkFlowStep(List<String> roleIds) {
-        return getWorkFlowStep(roleIds, false);
+        return getWorkFlowStep(roleIds, true);
     }
 
     /**

@@ -17,6 +17,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.demo.engineer.entity.NoticeRecord;
+import org.jeecg.modules.demo.engineer.entity.NoticeRecord;
 import org.jeecg.modules.demo.engineer.entity.SideRecord;
 import org.jeecg.modules.demo.engineer.service.INoticeRecordService;
 
@@ -92,7 +93,82 @@ public class NoticeRecordController extends JeecgController<NoticeRecord, INotic
 		IPage<NoticeRecord> pageList = noticeRecordService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
-	
+	 /**
+	  * 分页待办列表查询
+	  *
+	  * @param records
+	  * @param pageNo
+	  * @param pageSize
+	  * @param req
+	  * @return
+	  */
+	 @AutoLog(value = "通知单-分页待办列表查询")
+	 @ApiOperation(value = "通知单-分页待办列表查询", notes = "通知单-分页待办列表查询")
+	 @GetMapping(value = "/todo")
+	 public Result<?> queryPageTODOList(NoticeRecord records,
+										@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+										@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+										HttpServletRequest req) {
+		 // 查询当前登录用户可以查看到的步骤
+		 List<String> roleIds = sysBaseAPI.getRoleIdsByUsername(JwtUtil.getUserNameByToken(req));
+		 if (CollectionUtils.isEmpty(roleIds)) {
+			 return Result.OK(roleIds);
+		 }
+		 Result<List<Object>> workFlowStep = workFlowService.getWorkFlowStep(roleIds, false);
+		 if (!workFlowStep.isSuccess()) {
+			 return Result.OK(workFlowStep.getMessage());
+		 }
+		 List<Object> stepIds = workFlowStep.getResult();
+		 QueryWrapper<NoticeRecord> queryWrapper = QueryGenerator.initQueryWrapper(records, req.getParameterMap());
+		 queryWrapper.in("step_id", stepIds);
+		 Page<NoticeRecord> page = new Page<NoticeRecord>(pageNo, pageSize);
+		 IPage<NoticeRecord> pageList = noticeRecordService.page(page, queryWrapper);
+		 return Result.OK(pageList);
+	 }
+
+	 /**
+	  * 分页已办列表查询
+	  *
+	  * @param records
+	  * @param pageNo
+	  * @param pageSize
+	  * @param req
+	  * @return
+	  */
+	 @AutoLog(value = "通知单-分页已办列表查询")
+	 @ApiOperation(value = "通知单-分页已办列表查询", notes = "通知单-分页已办列表查询")
+	 @GetMapping(value = "/complete")
+	 public Result<?> queryPageCompleteList(NoticeRecord records,
+											@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+											@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+											HttpServletRequest req) {
+		 // 查询当前登录用户可以查看到的步骤
+		 List<String> roleIds = sysBaseAPI.getRoleIdsByUsername(JwtUtil.getUserNameByToken(req));
+		 if (CollectionUtils.isEmpty(roleIds)) {
+			 return Result.OK(roleIds);
+		 }
+		 Result<List<Object>> workFlowStep = workFlowService.getWorkFlowStep(roleIds, null);
+		 if (!workFlowStep.isSuccess()) {
+			 return Result.OK(workFlowStep.getMessage());
+		 }
+		 List<Object> stepIds = workFlowStep.getResult();
+
+		 // 查询当前用户已审核的工单
+		 Result<List<Integer>> taskIdsResult = workFlowService.getCompleteTaskId(JwtUtil.getUserNameByToken(req));
+		 if (!taskIdsResult.isSuccess()) {
+			 return Result.error(taskIdsResult.getMessage());
+		 }
+		 List<Integer> taskIds = taskIdsResult.getResult();
+		 if (CollectionUtils.isEmpty(taskIds)) {
+			 return Result.OK(taskIds);
+		 }
+		 QueryWrapper<NoticeRecord> queryWrapper = QueryGenerator.initQueryWrapper(records, req.getParameterMap());
+		 queryWrapper.in("id", taskIds);
+		 queryWrapper.in("step_id", stepIds);
+		 Page<NoticeRecord> page = new Page<NoticeRecord>(pageNo, pageSize);
+		 IPage<NoticeRecord> pageList = noticeRecordService.page(page, queryWrapper);
+		 return Result.OK(pageList);
+	 }
 	/**
 	 *   添加
 	 *
