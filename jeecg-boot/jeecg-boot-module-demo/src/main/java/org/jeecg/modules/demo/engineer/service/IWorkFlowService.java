@@ -34,4 +34,22 @@ public interface IWorkFlowService extends IService<WorkFlow> {
      * @return 可操作的步骤
      */
     Result getWorkFlowStep(List<String> roleIds);
+
+
+    /**
+     * 查询对应角色操作的步骤
+     *
+     * @param roleIds  角色集合
+     * @param isFinish 是否完成
+     * @return
+     */
+    Result getWorkFlowStep(List<String> roleIds, Boolean isFinish);
+
+    /**
+     * 用户已审核的工单
+     *
+     * @param userName 用户名称
+     * @return
+     */
+    Result getCompleteTaskId(String userName);
 }
