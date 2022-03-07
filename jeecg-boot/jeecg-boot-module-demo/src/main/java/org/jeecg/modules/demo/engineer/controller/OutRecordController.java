@@ -274,13 +274,13 @@ public class OutRecordController extends JeecgController<OutRecord, IOutRecordSe
 	 @AutoLog(value = "外部记录-外部")
 	 @ApiOperation(value = "外部记录-外部", notes = "外部记录-外部")
 	 @PutMapping(value = "/audit")
-	 public Result<?> audit(@RequestBody OutRecord outRecord) {
+	 public Result<?> audit(@RequestBody OutRecord outRecord, HttpServletRequest req) {
 		 String id = outRecord.getId();
 		 Integer isPass = outRecord.getPass();
 		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
 			 return Result.error("参数校验失败");
 		 }
-		 return outRecordService.audit(id, isPass, outRecord.getApprovalOpinion());
+		 return outRecordService.audit(id, JwtUtil.getUserNameByToken(req), isPass, outRecord.getApprovalOpinion());
 	 }
 
 

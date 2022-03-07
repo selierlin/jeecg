@@ -277,12 +277,12 @@ public class AnnualReportController extends JeecgController<AnnualReport, IAnnua
 	 @AutoLog(value = "旁听记录-旁听")
 	 @ApiOperation(value = "旁听记录-旁听", notes = "旁听记录-审批")
 	 @PutMapping(value = "/audit")
-	 public Result<?> audit(@RequestBody AnnualReport record) {
+	 public Result<?> audit(@RequestBody AnnualReport record, HttpServletRequest req) {
 		 String id = record.getId();
 		 Integer isPass = record.getPass();
 		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
 			 return Result.error("参数校验失败");
 		 }
-		 return annualReportService.audit(id, isPass, record.getApprovalOpinion());
+		 return annualReportService.audit(id, JwtUtil.getUserNameByToken(req), isPass, record.getApprovalOpinion());
 	 }
 }

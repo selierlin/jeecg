@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISupervisionDiaryService extends IService<SupervisionDiary> {
 
-    Result<?> audit(String id, Integer isPass, String approvalOpinion);
+    Result<?> audit(String id, String userName, Integer isPass, String approvalOpinion);
 }

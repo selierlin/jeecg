@@ -275,12 +275,12 @@ public class NoticeRecordController extends JeecgController<NoticeRecord, INotic
 	 @AutoLog(value = "记录-")
 	 @ApiOperation(value = "记录-", notes = "记录-审批")
 	 @PutMapping(value = "/audit")
-	 public Result<?> audit(@RequestBody SideRecord record) {
+	 public Result<?> audit(@RequestBody SideRecord record, HttpServletRequest req) {
 		 String id = record.getId();
 		 Integer isPass = record.getPass();
 		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
 			 return Result.error("参数校验失败");
 		 }
-		 return noticeRecordService.audit(id, isPass, record.getApprovalOpinion());
+		 return noticeRecordService.audit(id, JwtUtil.getUserNameByToken(req), isPass, record.getApprovalOpinion());
 	 }
 }

@@ -274,12 +274,12 @@ public class SupervisionDiaryController extends JeecgController<SupervisionDiary
 	 @AutoLog(value = "旁听记录-旁听")
 	 @ApiOperation(value = "旁听记录-旁听", notes = "旁听记录-审批")
 	 @PutMapping(value = "/audit")
-	 public Result<?> audit(@RequestBody SupervisionDiary record) {
+	 public Result<?> audit(@RequestBody SupervisionDiary record, HttpServletRequest req) {
 		 String id = record.getId();
 		 Integer isPass = record.getPass();
 		 if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
 			 return Result.error("参数校验失败");
 		 }
-		 return supervisionDiaryService.audit(id, isPass, record.getApprovalOpinion());
+		 return supervisionDiaryService.audit(id, JwtUtil.getUserNameByToken(req), isPass, record.getApprovalOpinion());
 	 }
 }

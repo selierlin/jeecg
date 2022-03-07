@@ -31,12 +31,17 @@ public class MoratoriumServiceImpl extends ServiceImpl<MoratoriumMapper, Morator
     IWorkFlowLogService workFlowLogService;
 
     @Override
-    public Result<?> audit(String id, Integer isPass, String remark) {
+    public Result<?> audit(String id, String userName, Integer isPass, String remark) {
         Moratorium record = getById(id);
         if (record == null) {
             return Result.error("找不到此记录");
         }
         Integer stepId = record.getStepId();
+        // 校验当前用户是否有审批权限
+        Result checkResult = workFlowService.checkUserRole(userName, record.getStepId());
+        if (!checkResult.isSuccess()) {
+            return checkResult;
+        }
         Result result = workFlowService.getStedId(id, isPass, stepId, remark);
         if (result.isSuccess()) {
             record.setState(isPass);
