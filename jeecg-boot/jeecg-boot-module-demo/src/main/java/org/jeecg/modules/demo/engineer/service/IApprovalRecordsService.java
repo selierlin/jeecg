@@ -15,10 +15,11 @@ public interface IApprovalRecordsService extends IService<ApprovalRecords> {
     /**
      * 审批
      *
-     * @param id     工单id
-     * @param isPass 是否通过
-     * @param remark 备注
+     * @param id       工单id
+     * @param userName 登录用户
+     * @param isPass   是否通过
+     * @param remark   备注
      * @return
      */
-    Result<?> audit(String id, Integer isPass, String remark);
+    Result<?> audit(String id, String userName, Integer isPass, String remark);
 }

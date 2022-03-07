@@ -3,7 +3,7 @@ package org.jeecg.modules;
 import org.jeecg.JeecgSystemApplication;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.service.IApprovalRecordsService;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,9 +21,9 @@ public class ApprovalRecordsServiceImplTest {
     @Test
     public void audit() {
         String id = "1468591776904683521";
-        int isPass = 2;
+        int isPass = 1;
         String remark = "通过了";
-        Result<?> audit = approvalRecordsService.audit(id, isPass, remark);
+        Result<?> audit = approvalRecordsService.audit(id, "jianli", isPass, remark);
         System.out.println(audit);
     }
 }

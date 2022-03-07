@@ -29,12 +29,17 @@ public class ApprovalRecordsServiceImpl extends ServiceImpl<ApprovalRecordsMappe
     IWorkFlowLogService workFlowLogService;
 
     @Override
-    public Result<?> audit(String id, Integer isPass, String remark) {
+    public Result<?> audit(String id, String userName, Integer isPass, String remark) {
         ApprovalRecords approvalRecords = getById(id);
         if (approvalRecords == null) {
             return Result.error("找不到此记录");
         }
         Integer stepId = approvalRecords.getStepId();
+        // 校验当前用户是否有审批权限
+        Result checkResult = workFlowService.checkUserRole(userName, approvalRecords.getStepId());
+        if (!checkResult.isSuccess()) {
+            return checkResult;
+        }
         Result result = workFlowService.getStedId(id, isPass, stepId, remark);
         if (result.isSuccess()) {
             approvalRecords.setState(isPass);

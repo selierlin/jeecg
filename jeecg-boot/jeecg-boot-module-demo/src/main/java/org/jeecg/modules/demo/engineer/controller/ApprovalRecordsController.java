@@ -249,13 +249,13 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
     @AutoLog(value = "审批记录-审批")
     @ApiOperation(value = "审批记录-审批", notes = "审批记录-审批")
     @PutMapping(value = "/audit")
-    public Result<?> audit(@RequestBody ApprovalRecords approvalRecords) {
+    public Result<?> audit(@RequestBody ApprovalRecords approvalRecords, HttpServletRequest req) {
         String id = approvalRecords.getId();
         Integer isPass = approvalRecords.getPass();
         if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
             return Result.error("参数校验失败");
         }
-        return approvalRecordsService.audit(id, isPass, approvalRecords.getApprovalOpinion());
+        return approvalRecordsService.audit(id, JwtUtil.getUserNameByToken(req),isPass, approvalRecords.getApprovalOpinion());
     }
 
     /**
