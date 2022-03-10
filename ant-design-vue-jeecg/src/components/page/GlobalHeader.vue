@@ -18,7 +18,7 @@
         @click="toggle"/>
 
       <span v-if="device === 'desktop'">信息化工程监理信息管理系统</span>
-      <span v-else>Jeecg-Boot</span>
+      <span v-else>信息化工程监理信息管理系统</span>
 
       <user-menu :theme="theme"/>
     </div>
