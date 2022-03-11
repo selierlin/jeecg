@@ -3,6 +3,7 @@ package org.jeecg.modules.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.modules.system.entity.SysCategory;
+import org.jeecg.modules.system.model.SysCategoryTreeModel;
 import org.jeecg.modules.system.model.TreeSelectModel;
 
 import java.util.List;
@@ -75,4 +76,7 @@ public interface ISysCategoryService extends IService<SysCategory> {
 	 */
 	List<String> loadDictItem(String ids, boolean delNotExist);
 
+	List<SysCategoryTreeModel> queryTreeList(String code);
+
+	List<SysCategoryTreeModel> searhBy(String keyWord);
 }

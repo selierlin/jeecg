@@ -70,6 +70,10 @@ public class FileDataController extends JeecgController<FileData, IFileDataServi
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
+		// 父级目录条件去除
+		if ("1501834697177022465".equals(fileData.getFileType())) {
+			fileData.setFileType("");
+		}
 		QueryWrapper<FileData> queryWrapper = QueryGenerator.initQueryWrapper(fileData, req.getParameterMap());
 		Page<FileData> page = new Page<FileData>(pageNo, pageSize);
 		IPage<FileData> pageList = fileDataService.page(page, queryWrapper);

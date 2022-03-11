@@ -2,6 +2,7 @@ package org.jeecg.modules.system.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,9 +11,13 @@ import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.util.FillRuleUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.entity.SysCategory;
+import org.jeecg.modules.system.entity.SysDepart;
 import org.jeecg.modules.system.mapper.SysCategoryMapper;
+import org.jeecg.modules.system.model.SysCategoryTreeModel;
+import org.jeecg.modules.system.model.SysDepartTreeModel;
 import org.jeecg.modules.system.model.TreeSelectModel;
 import org.jeecg.modules.system.service.ISysCategoryService;
+import org.jeecg.modules.system.util.FindsCategorysChildrenUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -231,5 +236,36 @@ public class SysCategoryServiceImpl extends ServiceImpl<SysCategoryMapper, SysCa
 		// update-end--author:sunjianlei--date:20210514--for：新增delNotExist参数，设为false不删除数据库里不存在的key ----
 		return textList;
 	}
+
+	@Override
+	public List<SysCategoryTreeModel> queryTreeList(String code) {
+		QueryWrapper<SysCategory> query = new QueryWrapper<>();
+		query.likeRight("code",code);
+		query.orderByAsc("create_time");
+		List<SysCategory> list = this.list(query);
+		// 调用wrapTreeDataToTreeList方法生成树状数据
+		List<SysCategoryTreeModel> listResult = FindsCategorysChildrenUtil.wrapTreeDataToTreeList(list);
+		return listResult;
+	}
+
+	@Override
+	public List<SysCategoryTreeModel> searhBy(String keyWord) {
+		LambdaQueryWrapper<SysCategory> query = new LambdaQueryWrapper<>();
+		query.like(SysCategory::getName, keyWord);
+		List<SysCategory> categoryList = this.list(query);
+		SysCategoryTreeModel model;
+		List<SysCategoryTreeModel> newList = new ArrayList<>();
+		if(categoryList.size() > 0) {
+			for(SysCategory category : categoryList) {
+				model = new SysCategoryTreeModel(category);
+				model.setChildren(null);
+				model.setIsLeaf(true);
+				newList.add(model);
+			}
+			return newList;
+		}
+		return null;
+	}
+
 
 }

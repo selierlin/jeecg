@@ -9,11 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.DictModel;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.system.vo.SysCategoryModel;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.entity.SysCategory;
+import org.jeecg.modules.system.model.SysCategoryTreeModel;
+import org.jeecg.modules.system.model.SysCategoryTreeModel;
 import org.jeecg.modules.system.model.TreeSelectModel;
 import org.jeecg.modules.system.service.ISysCategoryService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -476,5 +480,44 @@ public class SysCategoryController {
 		 }
 	 }
 
+	 /**
+	  * 查询数据 查出所有字典,并以树结构数据格式响应给前端
+	  *
+	  * @return
+	  */
+	 @RequestMapping(value = "/queryTreeList", method = RequestMethod.GET)
+	 public Result<List<SysCategoryTreeModel>> queryTreeList(@RequestParam(name="pcode",required = false) String pcode, @RequestParam(name="condition",required = false) String condition) {
+		 Result<List<SysCategoryTreeModel>> result = new Result<>();
+		 try {
+			 List<SysCategoryTreeModel> list = sysCategoryService.queryTreeList(pcode);
+			 result.setResult(list);
+			 result.setSuccess(true);
+		 } catch (Exception e) {
+			 log.error(e.getMessage(),e);
+		 }
+		 return result;
+	 }
+
+
+	 /**
+	  * <p>
+	  * 搜索功能方法,根据关键字模糊搜索
+	  * </p>
+	  *
+	  * @param keyWord
+	  * @return
+	  */
+	 @RequestMapping(value = "/searchBy", method = RequestMethod.GET)
+	 public Result<List<SysCategoryTreeModel>> searchBy(@RequestParam(name = "keyWord", required = true) String keyWord) {
+		 Result<List<SysCategoryTreeModel>> result = new Result<>();
+		 List<SysCategoryTreeModel> treeList = this.sysCategoryService.searhBy(keyWord);
+		 if (treeList == null || treeList.size() == 0) {
+			 result.setSuccess(false);
+			 result.setMessage("未查询匹配数据！");
+			 return result;
+		 }
+		 result.setResult(treeList);
+		 return result;
+	 }
 
 }
