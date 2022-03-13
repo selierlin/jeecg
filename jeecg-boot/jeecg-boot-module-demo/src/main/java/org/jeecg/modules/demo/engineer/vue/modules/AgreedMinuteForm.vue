@@ -9,11 +9,6 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="审批意见" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalOpinion">
-              <a-input v-model="model.approvalOpinion" placeholder="请输入审批意见"  ></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
             <a-form-model-item label="工程名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="projectName">
               <a-input v-model="model.projectName" placeholder="请输入工程名称"  ></a-input>
             </a-form-model-item>
@@ -99,8 +94,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="回执文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="backFile">
-              <j-upload v-model="model.backFile"   ></j-upload>
+            <a-form-model-item label="回执文件" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="backSource">
+              <j-upload v-model="model.backSource"   ></j-upload>
             </a-form-model-item>
           </a-col>
         </a-row>

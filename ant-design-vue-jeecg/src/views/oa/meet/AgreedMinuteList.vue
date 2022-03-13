@@ -16,13 +16,13 @@
           </a-col>
           <template v-if="toggleSearchStatus">
             <a-col :xl="6" :lg="7" :md="8" :sm="24">
-              <a-form-item label="签发时间">
-                <j-date placeholder="请选择签发时间" v-model="queryParam.signTime"></j-date>
+              <a-form-item label="文档名称">
+                <a-input placeholder="请输入文档名称" v-model="queryParam.fileName"></a-input>
               </a-form-item>
             </a-col>
             <a-col :xl="6" :lg="7" :md="8" :sm="24">
-              <a-form-item label="签收人">
-                <a-input placeholder="请输入签收人" v-model="queryParam.signUser"></a-input>
+              <a-form-item label="签发时间">
+                <j-date placeholder="请选择签发时间" v-model="queryParam.signTime"></j-date>
               </a-form-item>
             </a-col>
           </template>
@@ -100,20 +100,28 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleAudit(record)">审批</a>
+          <a @click="handleEdit(record)">编辑</a>
+
           <a-divider type="vertical" />
-          <a @click="handleLog(record.id)">查看日志</a>
-          <a-divider type="vertical" />
+          <a-dropdown>
+            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a @click="handleDetail(record)">详情</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                  <a>删除</a>
+                </a-popconfirm>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </span>
 
       </a-table>
     </div>
-    <a-modal :visible="logVisible" @cancel="logVisible = false" @ok="logVisible = false" width="60%">
-      <work-flow-log-modal :data="logData" ref="modalLogForm"></work-flow-log-modal>
-    </a-modal>
-    <agreed-minute-modal ref="modalForm" @ok="modalFormOk"></agreed-minute-modal>
-    <agreed-minute-modal1 ref="modalForm1"></agreed-minute-modal1>
 
+    <agreed-minute-modal ref="modalForm" @ok="modalFormOk"></agreed-minute-modal>
   </a-card>
 </template>
 
@@ -123,23 +131,17 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import AgreedMinuteModal from './modules/AgreedMinuteModal'
-  import AgreedMinuteModal1 from './modules/AgreedMinuteModal1'
-  import WorkFlowLogModal from './modules/WorkFlowLogModal'
-  import { axios } from '@/utils/request'
+  import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
     name: 'AgreedMinuteList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      AgreedMinuteModal,
-      AgreedMinuteModal1,
-      WorkFlowLogModal
+      AgreedMinuteModal
     },
     data () {
       return {
         description: '会议纪要管理页面',
-        logVisible: false,
-        logData: [],
         // 表头
         columns: [
           {
@@ -151,6 +153,16 @@
             customRender:function (t,r,index) {
               return parseInt(index)+1;
             }
+          },
+          {
+            title:'处理结果',
+            align:"center",
+            dataIndex: 'state_dictText'
+          },
+          {
+            title:'步骤',
+            align:"center",
+            dataIndex: 'stepId_dictText'
           },
           {
             title:'工程名称',
@@ -247,16 +259,6 @@
             dataIndex: 'resolution'
           },
           {
-            title:'处理结果',
-            align:"center",
-            dataIndex: 'state'
-          },
-          {
-            title:'步骤',
-            align:"center",
-            dataIndex: 'stepId_dictText'
-          },
-          {
             title: '操作',
             dataIndex: 'action',
             align:"center",
@@ -271,8 +273,7 @@
           deleteBatch: "/engineer/agreedMinute/deleteBatch",
           exportXlsUrl: "/engineer/agreedMinute/exportXls",
           importExcelUrl: "engineer/agreedMinute/importExcel",
-          audit: 'engineer/agreedMinute/audit',
-          log: 'engineer/workFlowLog/queryByTaskId',
+          
         },
         dictOptions:{},
         superFieldList:[],
@@ -289,30 +290,11 @@
     methods: {
       initDictConfig(){
       },
-      handleAudit(obj) {
-        this.$refs.modalForm1.audit(obj)
-      },
-      handleLog(id) {
-        axios
-          .get(`${this.url.log}?taskId=${id}`, {
-            taskId: id,
-          })
-          .then((res) => {
-            if (res.success) {
-              this.logData = res.result
-              this.logVisible = true
-            }else{
-              this.$message.warn('服务器出现错误');
-            }
-          })
-      },
       getSuperFieldList(){
         let fieldList=[];
         fieldList.push({type:'string',value:'fileSource',text:'报表文件',dictCode:''})
-        fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:''})
-        // fieldList.push({ type: 'int', value: 'state', text: '状态', dictCode: 'flow_state' })
-        fieldList.push({ type: 'int', value: 'stepId', text: '步骤', dictCode: 'work_flow,step_name,step_id' })
-        fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
+        fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:'flow_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
         fieldList.push({type:'string',value:'projectName',text:'工程名称',dictCode:''})
         fieldList.push({type:'string',value:'level',text:'密级',dictCode:''})
         fieldList.push({type:'string',value:'fileName',text:'文档名称',dictCode:''})
@@ -330,7 +312,7 @@
         fieldList.push({type:'string',value:'superName',text:'监理单位',dictCode:''})
         fieldList.push({type:'string',value:'content',text:'内容',dictCode:''})
         fieldList.push({type:'string',value:'resolution',text:'决议',dictCode:''})
-        fieldList.push({type:'string',value:'backFile',text:'回执文件',dictCode:''})
+        fieldList.push({type:'string',value:'backSource',text:'回执文件',dictCode:''})
         this.superFieldList = fieldList
       }
     }

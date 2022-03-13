@@ -16,13 +16,13 @@
           </a-col>
           <template v-if="toggleSearchStatus">
             <a-col :xl="6" :lg="7" :md="8" :sm="24">
-              <a-form-item label="签发时间">
-                <j-date placeholder="请选择签发时间" v-model="queryParam.signTime"></j-date>
+              <a-form-item label="文档名称">
+                <a-input placeholder="请输入文档名称" v-model="queryParam.fileName"></a-input>
               </a-form-item>
             </a-col>
             <a-col :xl="6" :lg="7" :md="8" :sm="24">
-              <a-form-item label="签收人">
-                <a-input placeholder="请输入签收人" v-model="queryParam.signUser"></a-input>
+              <a-form-item label="签发时间">
+                <j-date placeholder="请选择签发时间" v-model="queryParam.signTime"></j-date>
               </a-form-item>
             </a-col>
           </template>
@@ -131,6 +131,7 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import AgreedMinuteModal from './modules/AgreedMinuteModal'
+  import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
   export default {
     name: 'AgreedMinuteList',
@@ -156,12 +157,12 @@
           {
             title:'处理结果',
             align:"center",
-            dataIndex: 'state'
+            dataIndex: 'state_dictText'
           },
           {
             title:'步骤',
             align:"center",
-            dataIndex: 'stepId'
+            dataIndex: 'stepId_dictText'
           },
           {
             title:'工程名称',
@@ -258,12 +259,6 @@
             dataIndex: 'resolution'
           },
           {
-            title:'回执文件',
-            align:"center",
-            dataIndex: 'backFile',
-            scopedSlots: {customRender: 'fileSlot'}
-          },
-          {
             title: '操作',
             dataIndex: 'action',
             align:"center",
@@ -298,9 +293,8 @@
       getSuperFieldList(){
         let fieldList=[];
         fieldList.push({type:'string',value:'fileSource',text:'报表文件',dictCode:''})
-        fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:''})
-        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:''})
-        fieldList.push({type:'string',value:'approvalOpinion',text:'审批意见',dictCode:''})
+        fieldList.push({type:'int',value:'state',text:'处理结果',dictCode:'flow_state'})
+        fieldList.push({type:'int',value:'stepId',text:'步骤',dictCode:'work_flow,step_name,step_id'})
         fieldList.push({type:'string',value:'projectName',text:'工程名称',dictCode:''})
         fieldList.push({type:'string',value:'level',text:'密级',dictCode:''})
         fieldList.push({type:'string',value:'fileName',text:'文档名称',dictCode:''})
@@ -318,7 +312,7 @@
         fieldList.push({type:'string',value:'superName',text:'监理单位',dictCode:''})
         fieldList.push({type:'string',value:'content',text:'内容',dictCode:''})
         fieldList.push({type:'string',value:'resolution',text:'决议',dictCode:''})
-        fieldList.push({type:'string',value:'backFile',text:'回执文件',dictCode:''})
+        fieldList.push({type:'string',value:'backSource',text:'回执文件',dictCode:''})
         this.superFieldList = fieldList
       }
     }
