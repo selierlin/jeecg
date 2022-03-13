@@ -5,8 +5,8 @@
         <a-row :gutter="10">
 
           <a-col :md="6" :sm="12">
-            <a-form-model-item label="姓名" prop="realname" style="margin-left:8px">
-              <a-input placeholder="请输入姓名查询" v-model="queryParam.realname"></a-input>
+            <a-form-model-item label="文件名称" prop="realname" style="margin-left:8px">
+              <a-input placeholder="请输入文件名称查询" v-model="queryParam.realname"></a-input>
             </a-form-model-item>
           </a-col>
 
