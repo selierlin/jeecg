@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -152,4 +153,8 @@ public class AgreedMinute implements Serializable {
 	@Excel(name = "回执文件", width = 15)
     @ApiModelProperty(value = "回执文件")
     private java.lang.String backFile;
+    /**是否通过*/
+    @TableField(exist = false)
+    @ApiModelProperty(value = "是否通过")
+    private java.lang.Integer pass;
 }

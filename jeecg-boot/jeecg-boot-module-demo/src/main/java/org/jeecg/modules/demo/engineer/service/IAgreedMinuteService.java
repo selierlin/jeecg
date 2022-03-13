@@ -1,5 +1,6 @@
 package org.jeecg.modules.demo.engineer.service;
 
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.AgreedMinute;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,5 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IAgreedMinuteService extends IService<AgreedMinute> {
+
+    Result<?> audit(String id, Integer isPass, String approvalOpinion);
 
 }
