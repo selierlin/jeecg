@@ -49,7 +49,7 @@
               ref="table2"
               size="small"
               rowKey="id"
-              :columns="columns"
+              :columns="columns2"
               :dataSource="dataSource2"
               :pagination="false">
               <template slot="ellipsisText" slot-scope="text">
@@ -192,6 +192,29 @@
             dataIndex: 'content',
             width:200
           }
+        ],
+        columns2: [
+          {
+            title: '',
+            dataIndex: '',
+            key:'rowIndex',
+            width:50,
+            fixed:'left',
+            align:"center",
+            scopedSlots: {customRender: "dayWarnning"}
+          },
+          {
+            title:'发布时间',
+            align:"center",
+            dataIndex: 'createTime',
+            width:100
+          },
+          {
+            title:'发布内容',
+            align:"center",
+            dataIndex: 'msgContent',
+            width:150
+          }
         ]
 
       }
@@ -218,15 +241,14 @@
         //this.$router.push({ path: '/comp/mytask' })
       },
       mock(){
-        httpAction(this.url.annountCement).then((res)=>{
+        getAction(this.url.annountCement).then((res)=>{
           if(res.success){
-            tempSs1 = res.data;
+            this.dataSource2=res.result.records
           }
         }).finally(() => {
-        })
+          })
 
         this.dataSource1=tempSs1
-        this.dataSource2=tempSs2
         this.dataSource3=tempSs3
         this.dataSource4=[]
         this.ifNullDataSource(this.dataSource4,'.tytable4')

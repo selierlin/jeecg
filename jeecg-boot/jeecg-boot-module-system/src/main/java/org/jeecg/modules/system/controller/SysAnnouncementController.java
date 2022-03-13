@@ -523,8 +523,8 @@ public class SysAnnouncementController {
 			}
 		}
 		Date curr = new Date();
-		queryWrapper.lt("startTime", curr);
-		queryWrapper.gt("endTime", curr);
+		queryWrapper.lt("start_time", curr);
+		queryWrapper.gt("end_time", curr);
 		IPage<SysAnnouncement> pageList = sysAnnouncementService.page(page, queryWrapper);
 		result.setSuccess(true);
 		result.setResult(pageList);
