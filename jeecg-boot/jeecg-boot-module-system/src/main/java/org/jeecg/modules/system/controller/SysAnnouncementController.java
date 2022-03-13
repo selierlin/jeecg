@@ -490,4 +490,45 @@ public class SysAnnouncementController {
         return modelAndView;
     }
 
+
+	/**
+	 * 分页列表查询
+	 * @param sysAnnouncement
+	 * @param pageNo
+	 * @param pageSize
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public Result<IPage<SysAnnouncement>> queryNewList(SysAnnouncement sysAnnouncement,
+														@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+														@RequestParam(name="pageSize", defaultValue="5") Integer pageSize,
+														HttpServletRequest req) {
+		Result<IPage<SysAnnouncement>> result = new Result<IPage<SysAnnouncement>>();
+		sysAnnouncement.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
+		sysAnnouncement.setMsgCategory("1");
+		sysAnnouncement.setMsgType("ALL");
+		sysAnnouncement.setSendStatus("1");
+		QueryWrapper<SysAnnouncement> queryWrapper = new QueryWrapper<SysAnnouncement>(sysAnnouncement);
+		Page<SysAnnouncement> page = new Page<SysAnnouncement>(pageNo,pageSize);
+		//排序逻辑 处理
+
+		String column = req.getParameter("column");
+		String order = req.getParameter("order");
+		if(oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
+			if("asc".equals(order)) {
+				queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
+			}else {
+				queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
+			}
+		}
+		Date curr = new Date();
+		queryWrapper.lt("startTime", curr);
+		queryWrapper.gt("endTime", curr);
+		IPage<SysAnnouncement> pageList = sysAnnouncementService.page(page, queryWrapper);
+		result.setSuccess(true);
+		result.setResult(pageList);
+		return result;
+	}
+
 }

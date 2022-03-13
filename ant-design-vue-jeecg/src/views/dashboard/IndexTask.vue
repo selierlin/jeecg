@@ -39,7 +39,7 @@
           <a-card>
             <div slot="title" class="index-md-title">
               <img src="../../assets/zaiban.png"/>
-              我的在办【{{ dataSource2.length }}】
+              公司公告【{{ dataSource2.length }}】
             </div>
             <div slot="extra">
               <a v-if="dataSource2 && dataSource2.length>0" slot="footer" @click="goPage">更多 <a-icon type="double-right" /></a>
@@ -75,46 +75,19 @@
         <a-col :sm="24" :lg="12">
           <a-card>
             <div slot="title" class="index-md-title">
-              <img src="../../assets/guaz.png"/>
-              我的挂账【{{ dataSource4.length }}】
+              <img src="../../assets/zaiban.png"/>
+              我的在办【{{ dataSource2.length }}】
+            </div>
+            <div slot="extra">
+              <a v-if="dataSource2 && dataSource2.length>0" slot="footer" @click="goPage">更多 <a-icon type="double-right" /></a>
             </div>
             <a-table
-              :class="'my-index-table tytable4'"
-              ref="table4"
+              :class="'my-index-table tytable2'"
+              ref="table2"
               size="small"
               rowKey="id"
               :columns="columns"
-              :dataSource="dataSource4"
-              :pagination="false">
-              <template slot="ellipsisText" slot-scope="text">
-                <j-ellipsis :value="text" :length="textMaxLength"></j-ellipsis>
-              </template>
-
-              <template slot="dayWarnning" slot-scope="text,record">
-                <a-icon type="bulb" theme="twoTone" style="font-size:22px" :twoToneColor="getTipColor(record)"/>
-              </template>
-
-              <span slot="action" slot-scope="text, record">
-                <a @click="handleData">办理</a>
-              </span>
-
-            </a-table>
-          </a-card>
-        </a-col>
-
-        <a-col :sm="24" :lg="12">
-          <a-card>
-            <div slot="title" class="index-md-title">
-              <img src="../../assets/duban.png"/>
-              我的督办【{{ dataSource3.length }}】
-            </div>
-            <a-table
-              :class="'my-index-table tytable3'"
-              ref="table3"
-              size="small"
-              rowKey="id"
-              :columns="columns"
-              :dataSource="dataSource3"
+              :dataSource="dataSource2"
               :pagination="false">
               <template slot="ellipsisText" slot-scope="text">
                 <j-ellipsis :value="text" :length="textMaxLength"></j-ellipsis>
@@ -141,59 +114,25 @@
 <script>
   import noDataPng from '@/assets/nodata.png'
   import JEllipsis from '@/components/jeecg/JEllipsis'
+  import { httpAction, getAction } from '@/api/manage'
 
   const tempSs1=[{
     id:"001",
-    orderNo:"电[1]1267102",
+    type:"电[1]1267102",
     orderTitle:"药品出问题了",
-    restDay:1
-  },{
-    id:"002",
-    orderNo:"电[4]5967102",
-    orderTitle:"吃了xxx医院的药，病情越来越严重",
-    restDay:0
-  },{
-    id:"003",
-    orderNo:"电[3]5988987",
-    orderTitle:"今天去超市买鸡蛋，鸡蛋都是坏的",
-    restDay:7
-  },{
-    id:"004",
-    orderNo:"电[2]5213491",
-    orderTitle:"xx宝实体店高价售卖xx",
-    restDay:5
-  },{
-    id:"005",
-    orderNo:"电[1]1603491",
-    orderTitle:"以红利相诱，答应退保后扣一年费用",
-    restDay:0
+    createTime:"2021-02-01"
   }]
-
   const tempSs2=[{
     id:"001",
-    orderTitle:"我要投诉这个大超市",
-    orderNo:"电[1]10299456",
-    restDay:6
-  },{
-    id:"002",
-    orderTitle:"xxx医院乱开药方,售卖假药",
-    orderNo:"电[2]20235691",
-    restDay:0
-  },{
-    id:"003",
-    orderTitle:"我想问问这家店是干啥的",
-    orderNo:"电[3]495867322",
-    restDay:7
-  },{
-    id:"004",
-    orderTitle:"我要举报朝阳区奥森公园酒店",
-    orderNo:"电[2]1193849",
-    restDay:3
-  },{
-    id:"005",
-    orderTitle:"我今天吃饭吃到一个石头子",
-    orderNo:"电[4]56782344",
-    restDay:9
+    type:"电[1]1267102",
+    orderTitle:"药品出问题了",
+    createTime:"2021-02-01"
+  }]
+  const tempSs3=[{
+    id:"001",
+    type:"电[1]1267102",
+    orderTitle:"药品出问题了",
+    createTime:"2021-02-01"
   }]
 
   //4-7天
@@ -214,6 +153,11 @@
         dataSource2:[],
         dataSource3:[],
         dataSource4:[],
+        url: {
+          todo: "/engineer/task/todo",
+          mine: "/engineer/task/mine",
+          annountCement: "/sys/annountCement/new",
+        },
         columns: [
           {
             title: '',
@@ -225,27 +169,28 @@
             scopedSlots: {customRender: "dayWarnning"}
           },
           {
-            title:'剩余天数',
+            title:'申请日期',
             align:"center",
-            dataIndex: 'restDay',
-            width:80
+            dataIndex: 'createTime',
+            width:100
           },
           {
-            title:'工单标题',
+            title:'待办类型',
             align:"center",
-            dataIndex: 'orderTitle',
-            scopedSlots: {customRender: "ellipsisText"}
+            dataIndex: 'type',
+            width:150
           },
           {
-            title:'工单编号',
+            title:'编号',
             align:"center",
-            dataIndex: 'orderNo',
+            dataIndex: 'id',
+            width:300
           },
           {
-            title: '操作',
-            dataIndex: 'action',
+            title:'内容',
             align:"center",
-            scopedSlots: { customRender: 'action' }
+            dataIndex: 'content',
+            width:200
           }
         ]
 
@@ -273,9 +218,16 @@
         //this.$router.push({ path: '/comp/mytask' })
       },
       mock(){
+        httpAction(this.url.annountCement).then((res)=>{
+          if(res.success){
+            tempSs1 = res.data;
+          }
+        }).finally(() => {
+        })
+
         this.dataSource1=tempSs1
         this.dataSource2=tempSs2
-        this.dataSource3=tempSs1
+        this.dataSource3=tempSs3
         this.dataSource4=[]
         this.ifNullDataSource(this.dataSource4,'.tytable4')
       },
@@ -295,9 +247,6 @@
       handleData(){
         this.$message.success("办理完成")
       }
-
-
-
 
     }
   }
