@@ -180,16 +180,6 @@
             dataIndex: 'closed_dictText'
           },
           {
-            title:'状态',
-            align:"center",
-            dataIndex: 'state_dictText'
-          },
-          {
-            title:'步骤',
-            align:"center",
-            dataIndex: 'stepId_dictText'
-          },
-          {
             title: '操作',
             dataIndex: 'action',
             align:"center",

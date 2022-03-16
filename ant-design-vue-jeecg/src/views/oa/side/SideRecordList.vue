@@ -166,16 +166,6 @@
             scopedSlots: {customRender: 'fileSlot'}
           },
           {
-            title:'状态',
-            align:"center",
-            dataIndex: 'state_dictText'
-          },
-          {
-            title:'步骤',
-            align:"center",
-            dataIndex: 'stepId_dictText'
-          },
-          {
             title:'申请人',
             align:"center",
             dataIndex: 'createBy'

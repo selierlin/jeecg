@@ -44,18 +44,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('会议纪要')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
       <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
-      </a-dropdown>
     </div>
 
     <!-- table区域-begin -->
@@ -101,7 +90,8 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-
+          <a-divider type="vertical" />
+          <a @click="handleLog(record.id)">查看日志</a>
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -120,8 +110,11 @@
 
       </a-table>
     </div>
-
+    <a-modal :visible="logVisible" @cancel="logVisible = false" @ok="logVisible = false" width="60%">
+      <work-flow-log-modal :data="logData" ref="modalLogForm"></work-flow-log-modal>
+    </a-modal>
     <agreed-minute-modal ref="modalForm" @ok="modalFormOk"></agreed-minute-modal>
+    <agreed-minute-modal1 ref="modalForm1"></agreed-minute-modal1>
   </a-card>
 </template>
 
@@ -131,17 +124,23 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import AgreedMinuteModal from './modules/AgreedMinuteModal'
+  import AgreedMinuteModal1 from './modules/AgreedMinuteModal1'
+  import WorkFlowLogModal from './modules/WorkFlowLogModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
-
+  import { axios } from '@/utils/request'
   export default {
     name: 'AgreedMinuteList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      AgreedMinuteModal
+      AgreedMinuteModal,
+      AgreedMinuteModal1,
+      WorkFlowLogModal
     },
     data () {
       return {
         description: '会议纪要管理页面',
+        logVisible: false,
+        logData: [],
         // 表头
         columns: [
           {
@@ -153,16 +152,6 @@
             customRender:function (t,r,index) {
               return parseInt(index)+1;
             }
-          },
-          {
-            title:'处理结果',
-            align:"center",
-            dataIndex: 'state_dictText'
-          },
-          {
-            title:'步骤',
-            align:"center",
-            dataIndex: 'stepId_dictText'
           },
           {
             title:'工程名称',
@@ -249,11 +238,6 @@
             dataIndex: 'superName'
           },
           {
-            title:'内容',
-            align:"center",
-            dataIndex: 'content'
-          },
-          {
             title:'决议',
             align:"center",
             dataIndex: 'resolution'
@@ -273,7 +257,8 @@
           deleteBatch: "/engineer/agreedMinute/deleteBatch",
           exportXlsUrl: "/engineer/agreedMinute/exportXls",
           importExcelUrl: "engineer/agreedMinute/importExcel",
-          
+          audit: 'engineer/agreedMinute/audit',
+          log: 'engineer/workFlowLog/queryByTaskId',
         },
         dictOptions:{},
         superFieldList:[],
@@ -289,6 +274,23 @@
     },
     methods: {
       initDictConfig(){
+      },
+      handleAudit(obj) {
+        this.$refs.modalForm1.audit(obj)
+      },
+      handleLog(id) {
+        axios
+          .get(`${this.url.log}?taskId=${id}`, {
+            taskId: id,
+          })
+          .then((res) => {
+            if (res.success) {
+              this.logData = res.result
+              this.logVisible = true
+            }else{
+              this.$message.warn('服务器出现错误');
+            }
+          })
       },
       getSuperFieldList(){
         let fieldList=[];

@@ -163,21 +163,6 @@
             scopedSlots: {customRender: 'fileSlot'}
           },
           {
-            title:'处理结果',
-            align:"center",
-            dataIndex: 'state_dictText'
-          },
-          {
-            title:'步骤',
-            align:"center",
-            dataIndex: 'stepId_dictText'
-          },
-          {
-            title:'审批意见',
-            align:"center",
-            dataIndex: 'approvalOpinion'
-          },
-          {
             title:'创建人',
             align:"center",
             dataIndex: 'createBy'

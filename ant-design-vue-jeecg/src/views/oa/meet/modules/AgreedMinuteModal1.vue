@@ -14,7 +14,7 @@
           通过
         </a-button>
       </template>
-    <agreed-minute-form1 ref="realForm1" @ok="submitCallback" :disabled="disableSubmit"></agreed-minute-form1>
+    <agreed-minute-form1 ref="realForm1" :disabled="disableSubmit"></agreed-minute-form1>
   </j-modal>
 </template>
 
