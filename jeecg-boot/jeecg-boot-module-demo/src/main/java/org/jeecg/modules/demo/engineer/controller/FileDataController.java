@@ -71,7 +71,7 @@ public class FileDataController extends JeecgController<FileData, IFileDataServi
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		// 父级目录条件去除
-		if ("1501834697177022465".equals(fileData.getFileType())) {
+		if ("1503972574920941569".equals(fileData.getFileType())) {
 			fileData.setFileType("");
 		}
 		QueryWrapper<FileData> queryWrapper = QueryGenerator.initQueryWrapper(fileData, req.getParameterMap());

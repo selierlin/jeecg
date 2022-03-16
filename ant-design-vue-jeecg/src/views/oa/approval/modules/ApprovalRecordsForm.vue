@@ -24,11 +24,6 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="审批意见" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="approvalOpinion">
-              <a-textarea v-model="model.approvalOpinion" rows="4" placeholder="请输入审批意见" />
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
             <a-form-model-item label="返回时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="returnTime">
               <j-date placeholder="请选择返回时间"  v-model="model.returnTime" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" />
             </a-form-model-item>
