@@ -112,6 +112,22 @@ public class WorkFlowServiceImpl extends ServiceImpl<WorkFlowMapper, WorkFlow> i
         }
         return Result.OK(stepIds);
     }
+    /**
+     * 查询对应角色可操作的步骤
+     *
+     * @return
+     */
+    @Override
+    public Result getWorkFlowUnFinishStep() {
+        QueryWrapper<WorkFlow> flowQueryWrapper = new QueryWrapper<>();
+        flowQueryWrapper.select("step_id");
+        flowQueryWrapper.isNotNull("next_step_id");
+        List<Object> stepIds = this.listObjs(flowQueryWrapper);
+        if (CollectionUtils.isEmpty(stepIds)) {
+            return Result.error("无流程数据");
+        }
+        return Result.OK(stepIds);
+    }
 
     /**
      * 用户已审核的工单

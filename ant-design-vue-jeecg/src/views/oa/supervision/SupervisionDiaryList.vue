@@ -221,7 +221,7 @@
         this.$refs.modalForm1.audit(obj)
       },      
       handlePrint(id) {
-        let url = window._CONFIG['domianURL'] + '/jmreport/view/655257991467216896?id='+id;
+        let url = window._CONFIG['domianURL'] + '/jmreport/view/664312387998601216?id='+id;
         window.open(url);
       },
       handleLog(id) {

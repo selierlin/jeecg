@@ -44,6 +44,12 @@ public interface IWorkFlowService extends IService<WorkFlow> {
      * @return
      */
     Result getWorkFlowStep(List<String> roleIds, Boolean isFinish);
+    /**
+     * 查询未完成操作的步骤
+
+     * @return
+     */
+    Result getWorkFlowUnFinishStep();
 
     /**
      * 用户已审核的工单

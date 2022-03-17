@@ -76,10 +76,10 @@
           <a-card>
             <div slot="title" class="index-md-title">
               <img src="../../assets/zaiban.png"/>
-              我的在办【{{ dataSource2.length }}】
+              我的在办【{{ dataSource3.length }}】
             </div>
             <div slot="extra">
-              <a v-if="dataSource2 && dataSource2.length>0" slot="footer" @click="goPage">更多 <a-icon type="double-right" /></a>
+              <a v-if="dataSource3 && dataSource3.length>0" slot="footer" @click="goPage">更多 <a-icon type="double-right" /></a>
             </div>
             <a-table
               :class="'my-index-table tytable2'"
@@ -87,7 +87,7 @@
               size="small"
               rowKey="id"
               :columns="columns"
-              :dataSource="dataSource2"
+              :dataSource="dataSource3"
               :pagination="false">
               <template slot="ellipsisText" slot-scope="text">
                 <j-ellipsis :value="text" :length="textMaxLength"></j-ellipsis>
@@ -172,12 +172,12 @@
             title:'申请日期',
             align:"center",
             dataIndex: 'createTime',
-            width:100
+            width:150
           },
           {
             title:'待办类型',
             align:"center",
-            dataIndex: 'type',
+            dataIndex: 'taskName',
             width:150
           },
           {
@@ -185,12 +185,6 @@
             align:"center",
             dataIndex: 'id',
             width:300
-          },
-          {
-            title:'内容',
-            align:"center",
-            dataIndex: 'content',
-            width:200
           }
         ],
         columns2: [
@@ -241,15 +235,25 @@
         //this.$router.push({ path: '/comp/mytask' })
       },
       mock(){
+        getAction(this.url.todo).then((res)=>{
+        if(res.success){
+          this.dataSource1=res.result
+        }
+      }).finally(() => {
+        })
         getAction(this.url.annountCement).then((res)=>{
           if(res.success){
             this.dataSource2=res.result.records
           }
         }).finally(() => {
           })
+          getAction(this.url.mine).then((res)=>{
+          if(res.success){
+            this.dataSource3=res.result
+          }
+        }).finally(() => {
+          })
 
-        this.dataSource1=tempSs1
-        this.dataSource3=tempSs3
         this.dataSource4=[]
         this.ifNullDataSource(this.dataSource4,'.tytable4')
       },
