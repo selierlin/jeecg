@@ -85,7 +85,7 @@ public class SystemAPIController {
     /**
      * 根据用户账号查询用户信息
      * @param username
-     * @return
+     * @return 用户信息
      */
     @GetMapping("/getUserByName")
     public LoginUser getUserByName(@RequestParam("username") String username){
@@ -95,7 +95,7 @@ public class SystemAPIController {
     /**
      * 根据用户id查询用户信息
      * @param id
-     * @return
+     * @return 用户信息
      */
     @GetMapping("/getUserById")
     LoginUser getUserById(@RequestParam("id") String id){
@@ -105,7 +105,7 @@ public class SystemAPIController {
     /**
      * 通过用户账号查询角色集合
      * @param username
-     * @return
+     * @return 角色集合
      */
     @GetMapping("/getRolesByUsername")
     List<String> getRolesByUsername(@RequestParam("username") String username){
