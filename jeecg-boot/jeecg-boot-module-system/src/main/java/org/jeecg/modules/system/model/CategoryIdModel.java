@@ -10,10 +10,9 @@ import java.util.List;
  * <p>
  * 部门表 封装树结构的部门的名称的实体类
  * <p>
- * 
- * @Author Steve
- * @Since 2019-01-22 
  *
+ * @Author Steve
+ * @Since 2019-01-22
  */
 public class CategoryIdModel implements Serializable {
 
@@ -27,11 +26,12 @@ public class CategoryIdModel implements Serializable {
 
     // 部门名称
     private String title;
-    
+
     List<CategoryIdModel> children = new ArrayList<>();
-    
+
     /**
      * 将SysCategoryTreeModel的部分数据放在该对象当中
+     *
      * @param treeModel
      * @return
      */
@@ -41,9 +41,10 @@ public class CategoryIdModel implements Serializable {
         this.title = treeModel.getName();
         return this;
     }
-    
+
     /**
      * 该方法为用户部门的实现类所使用
+     *
      * @param SysCategory
      * @return
      */
@@ -52,7 +53,7 @@ public class CategoryIdModel implements Serializable {
         this.value = SysCategory.getId();
         this.title = SysCategory.getName();
         return this;
-    } 
+    }
 
     public List<CategoryIdModel> getChildren() {
         return children;

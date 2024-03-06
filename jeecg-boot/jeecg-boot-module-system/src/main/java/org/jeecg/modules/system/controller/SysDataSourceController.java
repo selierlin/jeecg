@@ -1,10 +1,5 @@
 package org.jeecg.modules.system.controller;
 
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.core.util.HexUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
-import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -69,9 +64,9 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
         IPage<SysDataSource> pageList = sysDataSourceService.page(page, queryWrapper);
         try {
             List<SysDataSource> records = pageList.getRecords();
-            records.forEach(item->{
+            records.forEach(item -> {
                 String dbPassword = item.getDbPassword();
-                if(StringUtils.isNotBlank(dbPassword)){
+                if (StringUtils.isNotBlank(dbPassword)) {
                     String decodedStr = SecurityUtil.jiemi(dbPassword);
                     item.setDbPassword(decodedStr);
                 }
@@ -109,7 +104,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     public Result<?> add(@RequestBody SysDataSource sysDataSource) {
         try {
             String dbPassword = sysDataSource.getDbPassword();
-            if(StringUtils.isNotBlank(dbPassword)){
+            if (StringUtils.isNotBlank(dbPassword)) {
                 String encrypt = SecurityUtil.jiami(dbPassword);
                 sysDataSource.setDbPassword(encrypt);
             }
@@ -134,7 +129,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
             SysDataSource d = sysDataSourceService.getById(sysDataSource.getId());
             DataSourceCachePool.removeCache(d.getCode());
             String dbPassword = sysDataSource.getDbPassword();
-            if(StringUtils.isNotBlank(dbPassword)){
+            if (StringUtils.isNotBlank(dbPassword)) {
                 String encrypt = SecurityUtil.jiami(dbPassword);
                 sysDataSource.setDbPassword(encrypt);
             }
@@ -172,7 +167,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     @DeleteMapping(value = "/deleteBatch")
     public Result<?> deleteBatch(@RequestParam(name = "ids") String ids) {
         List<String> idList = Arrays.asList(ids.split(","));
-        idList.forEach(item->{
+        idList.forEach(item -> {
             SysDataSource sysDataSource = sysDataSourceService.getById(item);
             DataSourceCachePool.removeCache(sysDataSource.getCode());
         });

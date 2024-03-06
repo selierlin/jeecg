@@ -1,19 +1,7 @@
 package org.jeecg.modules.cas.util;
 
 
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -21,11 +9,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.StringReader;
+import java.util.*;
 
 /**
  * 解析cas,ST验证后的xml
- *
  */
 @Slf4j
 public final class XmlUtils {
@@ -34,7 +27,6 @@ public final class XmlUtils {
      * Creates a new namespace-aware DOM document object by parsing the given XML.
      *
      * @param xml XML content.
-     *
      * @return DOM document.
      */
     public static Document newDocument(final String xml) {
@@ -95,7 +87,7 @@ public final class XmlUtils {
             private StringBuilder buffer = new StringBuilder();
 
             public void startElement(final String uri, final String localName, final String qName,
-                    final Attributes attributes) throws SAXException {
+                                     final Attributes attributes) throws SAXException {
                 if (localName.equals(element)) {
                     this.foundElement = true;
                 }
@@ -146,7 +138,7 @@ public final class XmlUtils {
             private boolean foundElement = false;
 
             public void startElement(final String uri, final String localName, final String qName,
-                    final Attributes attributes) throws SAXException {
+                                     final Attributes attributes) throws SAXException {
                 if (localName.equals(element)) {
                     this.foundElement = true;
                 }
@@ -177,8 +169,8 @@ public final class XmlUtils {
 
         return builder.toString();
     }
-    
-    
+
+
     public static Map<String, Object> extractCustomAttributes(final String xml) {
         final SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
@@ -191,11 +183,11 @@ public final class XmlUtils {
             xmlReader.parse(new InputSource(new StringReader(xml)));
             return handler.getAttributes();
         } catch (final Exception e) {
-        	log.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return Collections.emptyMap();
         }
     }
-    
+
     private static class CustomAttributeHandler extends DefaultHandler {
 
         private Map<String, Object> attributes;
@@ -213,7 +205,7 @@ public final class XmlUtils {
 
         @Override
         public void startElement(final String namespaceURI, final String localName, final String qName,
-                final Attributes attributes) throws SAXException {
+                                 final Attributes attributes) throws SAXException {
             if ("attributes".equals(localName)) {
                 this.foundAttributes = true;
             } else if (this.foundAttributes) {
@@ -258,35 +250,35 @@ public final class XmlUtils {
             return this.attributes;
         }
     }
-    
-    
+
+
     public static void main(String[] args) {
-		String result = "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\r\n" + 
-				"    <cas:authenticationSuccess>\r\n" + 
-				"        <cas:user>admin</cas:user>\r\n" + 
-				"        <cas:attributes>\r\n" + 
-				"            <cas:credentialType>UsernamePasswordCredential</cas:credentialType>\r\n" + 
-				"            <cas:isFromNewLogin>true</cas:isFromNewLogin>\r\n" + 
-				"            <cas:authenticationDate>2019-08-01T19:33:21.527+08:00[Asia/Shanghai]</cas:authenticationDate>\r\n" + 
-				"            <cas:authenticationMethod>RestAuthenticationHandler</cas:authenticationMethod>\r\n" + 
-				"            <cas:successfulAuthenticationHandlers>RestAuthenticationHandler</cas:successfulAuthenticationHandlers>\r\n" + 
-				"            <cas:longTermAuthenticationRequestTokenUsed>false</cas:longTermAuthenticationRequestTokenUsed>\r\n" + 
-				"        </cas:attributes>\r\n" + 
-				"    </cas:authenticationSuccess>\r\n" + 
-				"</cas:serviceResponse>";
-		
-		String errorRes = "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\r\n" + 
-				"    <cas:authenticationFailure code=\"INVALID_TICKET\">未能够识别出目标 &#39;ST-5-1g-9cNES6KXNRwq-GuRET103sm0-DESKTOP-VKLS8B3&#39;票根</cas:authenticationFailure>\r\n" + 
-				"</cas:serviceResponse>";
-		
-		String error = XmlUtils.getTextForElement(errorRes, "authenticationFailure");
-		System.out.println("------"+error);
-		
-		String error2 = XmlUtils.getTextForElement(result, "authenticationFailure");
-		System.out.println("------"+error2);
-		String principal = XmlUtils.getTextForElement(result, "user");
-		System.out.println("---principal---"+principal);
-		Map<String, Object> attributes = XmlUtils.extractCustomAttributes(result);
-		System.out.println("---attributes---"+attributes);
-	}
+        String result = "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\r\n" +
+                "    <cas:authenticationSuccess>\r\n" +
+                "        <cas:user>admin</cas:user>\r\n" +
+                "        <cas:attributes>\r\n" +
+                "            <cas:credentialType>UsernamePasswordCredential</cas:credentialType>\r\n" +
+                "            <cas:isFromNewLogin>true</cas:isFromNewLogin>\r\n" +
+                "            <cas:authenticationDate>2019-08-01T19:33:21.527+08:00[Asia/Shanghai]</cas:authenticationDate>\r\n" +
+                "            <cas:authenticationMethod>RestAuthenticationHandler</cas:authenticationMethod>\r\n" +
+                "            <cas:successfulAuthenticationHandlers>RestAuthenticationHandler</cas:successfulAuthenticationHandlers>\r\n" +
+                "            <cas:longTermAuthenticationRequestTokenUsed>false</cas:longTermAuthenticationRequestTokenUsed>\r\n" +
+                "        </cas:attributes>\r\n" +
+                "    </cas:authenticationSuccess>\r\n" +
+                "</cas:serviceResponse>";
+
+        String errorRes = "<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>\r\n" +
+                "    <cas:authenticationFailure code=\"INVALID_TICKET\">未能够识别出目标 &#39;ST-5-1g-9cNES6KXNRwq-GuRET103sm0-DESKTOP-VKLS8B3&#39;票根</cas:authenticationFailure>\r\n" +
+                "</cas:serviceResponse>";
+
+        String error = XmlUtils.getTextForElement(errorRes, "authenticationFailure");
+        System.out.println("------" + error);
+
+        String error2 = XmlUtils.getTextForElement(result, "authenticationFailure");
+        System.out.println("------" + error2);
+        String principal = XmlUtils.getTextForElement(result, "user");
+        System.out.println("---principal---" + principal);
+        Map<String, Object> attributes = XmlUtils.extractCustomAttributes(result);
+        System.out.println("---attributes---" + attributes);
+    }
 }

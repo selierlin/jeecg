@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.util.oConvertUtils;
@@ -28,8 +27,8 @@ import java.util.List;
 @Slf4j
 public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, ISysGatewayRouteService> {
 
-	@Autowired
-	private ISysGatewayRouteService sysGatewayRouteService;
+    @Autowired
+    private ISysGatewayRouteService sysGatewayRouteService;
 
     @PostMapping(value = "/updateAll")
     public Result<?> updateAll(@RequestBody JSONObject json) {
@@ -37,29 +36,29 @@ public class SysGatewayRouteController extends JeecgController<SysGatewayRoute, 
         return Result.ok("操作成功！");
     }
 
-	@GetMapping(value = "/list")
-	public Result<?> queryPageList(SysGatewayRoute sysGatewayRoute) {
-		LambdaQueryWrapper<SysGatewayRoute> query = new LambdaQueryWrapper<>();
-		List<SysGatewayRoute> ls = sysGatewayRouteService.list(query);
-		JSONArray array = new JSONArray();
-		for(SysGatewayRoute rt: ls){
-			JSONObject obj = (JSONObject) JSONObject.toJSON(rt);
-			if(oConvertUtils.isNotEmpty(rt.getPredicates())){
-				obj.put("predicates", JSONArray.parseArray(rt.getPredicates()));
-			}
-			if(oConvertUtils.isNotEmpty(rt.getFilters())){
-				obj.put("filters", JSONArray.parseArray(rt.getFilters()));
-			}
-			array.add(obj);
-		}
-		return Result.ok(array);
-	}
+    @GetMapping(value = "/list")
+    public Result<?> queryPageList(SysGatewayRoute sysGatewayRoute) {
+        LambdaQueryWrapper<SysGatewayRoute> query = new LambdaQueryWrapper<>();
+        List<SysGatewayRoute> ls = sysGatewayRouteService.list(query);
+        JSONArray array = new JSONArray();
+        for (SysGatewayRoute rt : ls) {
+            JSONObject obj = (JSONObject) JSONObject.toJSON(rt);
+            if (oConvertUtils.isNotEmpty(rt.getPredicates())) {
+                obj.put("predicates", JSONArray.parseArray(rt.getPredicates()));
+            }
+            if (oConvertUtils.isNotEmpty(rt.getFilters())) {
+                obj.put("filters", JSONArray.parseArray(rt.getFilters()));
+            }
+            array.add(obj);
+        }
+        return Result.ok(array);
+    }
 
-	@GetMapping(value = "/clearRedis")
-	public Result<?> clearRedis() {
-		sysGatewayRouteService.clearRedis();
-		return Result.ok("清除成功！");
-	}
+    @GetMapping(value = "/clearRedis")
+    public Result<?> clearRedis() {
+        sysGatewayRouteService.clearRedis();
+        return Result.ok("清除成功！");
+    }
 
     /**
      * 通过id删除

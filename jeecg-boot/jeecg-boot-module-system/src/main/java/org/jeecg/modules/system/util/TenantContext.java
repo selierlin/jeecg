@@ -1,12 +1,12 @@
-//package org.jeecg.modules.system.util;
+// package org.jeecg.modules.system.util;
 //
-//import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 //
 ///**
 // * 多租户 tenant_id存储器
 // */
 //@Slf4j
-//public class TenantContext {
+// public class TenantContext {
 //
 //    private static ThreadLocal<String> currentTenant = new ThreadLocal<>();
 //

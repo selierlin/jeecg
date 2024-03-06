@@ -17,9 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: gateway路由管理
@@ -85,11 +83,11 @@ public class SysGatewayRouteServiceImpl extends ServiceImpl<SysGatewayRouteMappe
      * 更新redis路由缓存
      */
     private void resreshRouter() {
-        //更新redis路由缓存
+        // 更新redis路由缓存
         addRoute2Redis(CacheConstant.GATEWAY_ROUTES);
         BaseMap params = new BaseMap();
         params.put(GlobalConstants.HANDLER_NAME, "loderRouderHandler");
-        //刷新网关
+        // 刷新网关
         redisTemplate.convertAndSend(GlobalConstants.REDIS_TOPIC_NAME, params);
     }
 

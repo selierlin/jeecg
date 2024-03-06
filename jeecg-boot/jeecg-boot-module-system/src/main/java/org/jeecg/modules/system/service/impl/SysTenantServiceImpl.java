@@ -28,7 +28,7 @@ public class SysTenantServiceImpl extends ServiceImpl<SysTenantMapper, SysTenant
         LambdaQueryWrapper<SysTenant> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysTenant::getId, idList);
         queryWrapper.eq(SysTenant::getStatus, CommonConstant.STATUS_1);
-        //此处查询忽略时间条件
+        // 此处查询忽略时间条件
         return super.list(queryWrapper);
     }
 

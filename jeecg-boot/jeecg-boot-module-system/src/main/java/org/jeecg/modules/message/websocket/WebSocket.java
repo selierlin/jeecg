@@ -1,8 +1,11 @@
 package org.jeecg.modules.message.websocket;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArraySet;
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
+import org.jeecg.common.base.BaseMap;
+import org.jeecg.common.constant.WebsocketConst;
+import org.jeecg.common.modules.redis.client.JeecgRedisClient;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.websocket.OnClose;
@@ -11,15 +14,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-
-import org.jeecg.common.base.BaseMap;
-import org.jeecg.common.constant.WebsocketConst;
-import org.jeecg.common.modules.redis.client.JeecgRedisClient;
-import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSONObject;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @Author scott
@@ -28,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
-@ServerEndpoint("/websocket/{userId}") //此注解相当于设置访问URL
+@ServerEndpoint("/websocket/{userId}") // 此注解相当于设置访问URL
 public class WebSocket {
 
     private Session session;
@@ -102,12 +99,12 @@ public class WebSocket {
 
     @OnMessage
     public void onMessage(String message) {
-        //todo 现在有个定时任务刷，应该去掉
+        // todo 现在有个定时任务刷，应该去掉
         log.debug("【websocket消息】收到客户端消息:" + message);
         JSONObject obj = new JSONObject();
-        //业务类型
+        // 业务类型
         obj.put(WebsocketConst.MSG_CMD, WebsocketConst.CMD_CHECK);
-        //消息内容
+        // 消息内容
         obj.put(WebsocketConst.MSG_TXT, "心跳响应");
         for (WebSocket webSocket : webSockets) {
             webSocket.pushMessage(message);

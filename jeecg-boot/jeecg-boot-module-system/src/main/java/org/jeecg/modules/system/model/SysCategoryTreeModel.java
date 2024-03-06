@@ -12,46 +12,72 @@ import java.util.Objects;
  * <p>
  * 部门表 存储树结构数据的实体类
  * <p>
- * 
+ *
  * @Author Steve
- * @Since 2019-01-22 
+ * @Since 2019-01-22
  */
-public class SysCategoryTreeModel implements Serializable{
+public class SysCategoryTreeModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** 对应SysCategory中的id字段,前端数据树中的key*/
+    /**
+     * 对应SysCategory中的id字段,前端数据树中的key
+     */
     private String key;
 
-    /** 对应SysCategory中的id字段,前端数据树中的value*/
+    /**
+     * 对应SysCategory中的id字段,前端数据树中的value
+     */
     private String value;
 
-    /** 对应depart_name字段,前端数据树中的title*/
+    /**
+     * 对应depart_name字段,前端数据树中的title
+     */
     private String title;
 
 
     private boolean isLeaf;
     // 以下所有字段均与SysCategory相同
 
-    /**主键*/
+    /**
+     * 主键
+     */
     private java.lang.String id;
-    /**父级节点*/
+    /**
+     * 父级节点
+     */
     private java.lang.String pid;
-    /**类型名称*/
+    /**
+     * 类型名称
+     */
     private java.lang.String name;
-    /**类型编码*/
+    /**
+     * 类型编码
+     */
     private java.lang.String code;
-    /**创建人*/
+    /**
+     * 创建人
+     */
     private java.lang.String createBy;
-    /**创建日期*/
+    /**
+     * 创建日期
+     */
     private java.util.Date createTime;
-    /**更新人*/
+    /**
+     * 更新人
+     */
     private java.lang.String updateBy;
-    /**更新日期*/
+    /**
+     * 更新日期
+     */
     private java.util.Date updateTime;
-    /**所属部门*/
+    /**
+     * 所属部门
+     */
     private java.lang.String sysOrgCode;
-    /**是否有子节点*/
+    /**
+     * 是否有子节点
+     */
     private java.lang.String hasChild;
 
     private List<SysCategoryTreeModel> children = new ArrayList<>();
@@ -59,10 +85,11 @@ public class SysCategoryTreeModel implements Serializable{
 
     /**
      * 将SysCategory对象转换成SysCategoryTreeModel对象
+     *
      * @param sysCategory
      */
-	public SysCategoryTreeModel(SysCategory sysCategory) {
-		this.key = sysCategory.getId();
+    public SysCategoryTreeModel(SysCategory sysCategory) {
+        this.key = sysCategory.getId();
         this.value = sysCategory.getCode();
         this.title = sysCategory.getName();
         this.id = sysCategory.getId();
@@ -205,7 +232,8 @@ public class SysCategoryTreeModel implements Serializable{
         this.children = children;
     }
 
-    public SysCategoryTreeModel() { }
+    public SysCategoryTreeModel() {
+    }
 
     /**
      * 重写equals方法
@@ -213,11 +241,11 @@ public class SysCategoryTreeModel implements Serializable{
     @Override
     public boolean equals(Object o) {
         if (this == o) {
-			return true;
-		}
+            return true;
+        }
         if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
+            return false;
+        }
         SysCategoryTreeModel model = (SysCategoryTreeModel) o;
         return Objects.equals(id, model.id) &&
                 Objects.equals(pid, model.pid) &&
@@ -230,7 +258,7 @@ public class SysCategoryTreeModel implements Serializable{
                 Objects.equals(updateTime, model.updateTime) &&
                 Objects.equals(children, model.children);
     }
-    
+
     /**
      * 重写hashCode方法
      */
@@ -238,8 +266,8 @@ public class SysCategoryTreeModel implements Serializable{
     public int hashCode() {
 
         return Objects.hash(id, pid, name, code, hasChild,
-        		createBy, createTime, updateBy, updateTime,
-        		children);
+                createBy, createTime, updateBy, updateTime,
+                children);
     }
 
 }

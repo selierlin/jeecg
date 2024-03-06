@@ -7,14 +7,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.ImportExcelUtil;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.quartz.service.IQuartzJobService;
 import org.jeecg.modules.system.entity.SysPosition;
 import org.jeecg.modules.system.service.ISysPositionService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -115,7 +113,7 @@ public class SysPositionController {
             result.error500("未找到对应实体");
         } else {
             boolean ok = sysPositionService.updateById(sysPosition);
-            //TODO 返回false说明什么？
+            // TODO 返回false说明什么？
             if (ok) {
                 result.success("修改成功!");
             }
@@ -205,10 +203,10 @@ public class SysPositionController {
             e.printStackTrace();
         }
 
-        //Step.2 AutoPoi 导出Excel
+        // Step.2 AutoPoi 导出Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
         List<SysPosition> pageList = sysPositionService.list(queryWrapper);
-        //导出文件名称
+        // 导出文件名称
         mv.addObject(NormalExcelConstants.FILE_NAME, "职务表列表");
         mv.addObject(NormalExcelConstants.CLASS, SysPosition.class);
         mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("职务表列表数据", "导出人:Jeecg", "导出信息"));
@@ -224,7 +222,7 @@ public class SysPositionController {
      * @return
      */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
+    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         // 错误信息
@@ -237,10 +235,10 @@ public class SysPositionController {
             params.setHeadRows(1);
             params.setNeedSave(true);
             try {
-                List<Object>  listSysPositions = ExcelImportUtil.importExcel(file.getInputStream(), SysPosition.class, params);
-                List<String> list = ImportExcelUtil.importDateSave(listSysPositions, ISysPositionService.class, errorMessage,CommonConstant.SQL_INDEX_UNIQ_CODE);
-                errorLines+=list.size();
-                successLines+=(listSysPositions.size()-errorLines);
+                List<Object> listSysPositions = ExcelImportUtil.importExcel(file.getInputStream(), SysPosition.class, params);
+                List<String> list = ImportExcelUtil.importDateSave(listSysPositions, ISysPositionService.class, errorMessage, CommonConstant.SQL_INDEX_UNIQ_CODE);
+                errorLines += list.size();
+                successLines += (listSysPositions.size() - errorLines);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 return Result.error("文件导入失败:" + e.getMessage());
@@ -252,7 +250,7 @@ public class SysPositionController {
                 }
             }
         }
-        return ImportExcelUtil.imporReturnRes(errorLines,successLines,errorMessage);
+        return ImportExcelUtil.imporReturnRes(errorLines, successLines, errorMessage);
     }
 
     /**
@@ -267,7 +265,7 @@ public class SysPositionController {
     public Result<SysPosition> queryByCode(@RequestParam(name = "code", required = true) String code) {
         Result<SysPosition> result = new Result<SysPosition>();
         QueryWrapper<SysPosition> queryWrapper = new QueryWrapper<SysPosition>();
-        queryWrapper.eq("code",code);
+        queryWrapper.eq("code", code);
         SysPosition sysPosition = sysPositionService.getOne(queryWrapper);
         if (sysPosition == null) {
             result.error500("未找到对应实体");

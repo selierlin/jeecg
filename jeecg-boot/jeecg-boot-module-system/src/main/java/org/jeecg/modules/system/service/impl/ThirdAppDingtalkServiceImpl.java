@@ -353,7 +353,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
         for (User dtUserInfo : ddUserList) {
             SysThirdAccount sysThirdAccount = sysThirdAccountService.getOneByThirdUserId(dtUserInfo.getUserid(), THIRD_TYPE);
             List<SysUser> collect = sysUsersList.stream().filter(user -> (dtUserInfo.getMobile().equals(user.getPhone()) || dtUserInfo.getUserid().equals(user.getUsername()))
-                                                                 ).collect(Collectors.toList());
+            ).collect(Collectors.toList());
             if (collect != null && collect.size() > 0) {
                 SysUser sysUserTemp = collect.get(0);
                 // 循环到此说明用户匹配成功，进行更新操作
@@ -365,9 +365,9 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                 } catch (Exception e) {
                     this.syncUserCollectErrInfo(e, dtUserInfo, syncInfo);
                 }
-                //第三方账号关系表
+                // 第三方账号关系表
                 this.thirdAccountSaveOrUpdate(sysThirdAccount, updateSysUser.getId(), dtUserInfo.getUserid());
-            }else{
+            } else {
                 // 如果没有匹配到用户，则走创建逻辑
                 SysUser newSysUser = this.dtUserToSysUser(dtUserInfo);
                 try {
@@ -377,7 +377,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
                 } catch (Exception e) {
                     this.syncUserCollectErrInfo(e, dtUserInfo, syncInfo);
                 }
-                //第三方账号关系表
+                // 第三方账号关系表
                 this.thirdAccountSaveOrUpdate(null, newSysUser.getId(), dtUserInfo.getUserid());
             }
         }
@@ -743,7 +743,7 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             return null;
         }
         int agentId = thirdAppConfig.getDingtalk().getAgentIdInt();
-        String markdown = "### " + announcement.getTitile() + "\n" + oConvertUtils.getString(announcement.getMsgAbstract(),"空");
+        String markdown = "### " + announcement.getTitile() + "\n" + oConvertUtils.getString(announcement.getMsgAbstract(), "空");
         ActionCardMessage actionCard = new ActionCardMessage(markdown);
         actionCard.setTitle(announcement.getTitile());
         actionCard.setSingle_title("详情");
@@ -756,16 +756,16 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
             // 将userId转为username
             String[] userIds = null;
             String userId = announcement.getUserIds();
-            if(oConvertUtils.isNotEmpty(userId)){
+            if (oConvertUtils.isNotEmpty(userId)) {
                 userIds = userId.substring(0, (userId.length() - 1)).split(",");
-            }else{
+            } else {
                 LambdaQueryWrapper<SysAnnouncementSend> queryWrapper = new LambdaQueryWrapper<>();
                 queryWrapper.eq(SysAnnouncementSend::getAnntId, announcement.getId());
                 SysAnnouncementSend sysAnnouncementSend = sysAnnouncementSendMapper.selectOne(queryWrapper);
-                userIds = new String[] {sysAnnouncementSend.getUserId()};
+                userIds = new String[]{sysAnnouncementSend.getUserId()};
             }
 
-            if(userIds!=null){
+            if (userIds != null) {
                 String[] usernameList = sysUserService.userIdToUsername(Arrays.asList(userIds)).toArray(new String[]{});
                 // 通过第三方账号表查询出第三方userId
                 List<SysThirdAccount> thirdAccountList = sysThirdAccountService.listThirdUserIdByUsername(usernameList, THIRD_TYPE);

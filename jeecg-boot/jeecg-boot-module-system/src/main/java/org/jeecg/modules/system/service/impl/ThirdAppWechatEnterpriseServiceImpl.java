@@ -78,7 +78,9 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
         return null;
     }
 
-    /** 获取APPToken，新版企业微信的秘钥是分开的 */
+    /**
+     * 获取APPToken，新版企业微信的秘钥是分开的
+     */
     public String getAppAccessToken() {
         String CORP_ID = thirdAppConfig.getWechatEnterprise().getClientId();
         String SECRET = thirdAppConfig.getWechatEnterprise().getAgentAppSecret();
@@ -355,7 +357,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
             syncInfo.addFailInfo("企业微信用户列表查询失败！");
             return syncInfo;
         }
-        //查询本地用户
+        // 查询本地用户
         List<SysUser> sysUsersList = sysUserService.list();
         // 循环判断新用户和需要更新的用户
         for (User qwUser : qwUsersList) {
@@ -366,7 +368,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
              */
             SysThirdAccount sysThirdAccount = sysThirdAccountService.getOneByThirdUserId(qwUser.getUserid(), THIRD_TYPE);
             List<SysUser> collect = sysUsersList.stream().filter(user -> (qwUser.getMobile().equals(user.getPhone()) || qwUser.getUserid().equals(user.getUsername()))
-                                                                ).collect(Collectors.toList());
+            ).collect(Collectors.toList());
 
             if (collect != null && collect.size() > 0) {
                 SysUser sysUserTemp = collect.get(0);
@@ -382,7 +384,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
 
                 this.thirdAccountSaveOrUpdate(sysThirdAccount, updateSysUser.getId(), qwUser.getUserid());
                 // 更新完成，直接跳到下一次外部循环继续
-            }else{
+            } else {
                 // 没匹配到用户则走新增逻辑
                 SysUser newSysUser = this.qwUserToSysUser(qwUser);
                 try {
@@ -759,13 +761,13 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
             // 将userId转为username
             String userId = announcement.getUserIds();
             String[] userIds = null;
-            if(oConvertUtils.isNotEmpty(userId)){
+            if (oConvertUtils.isNotEmpty(userId)) {
                 userIds = userId.substring(0, (userId.length() - 1)).split(",");
-            }else{
+            } else {
                 LambdaQueryWrapper<SysAnnouncementSend> queryWrapper = new LambdaQueryWrapper<>();
                 queryWrapper.eq(SysAnnouncementSend::getAnntId, announcement.getId());
                 SysAnnouncementSend sysAnnouncementSend = sysAnnouncementSendMapper.selectOne(queryWrapper);
-                userIds = new String[] {sysAnnouncementSend.getUserId()};
+                userIds = new String[]{sysAnnouncementSend.getUserId()};
             }
             List<String> usernameList = sysUserService.userIdToUsername(Arrays.asList(userIds));
             usernameString = String.join(",", usernameList);
@@ -774,7 +776,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
         textCard.setTouser(this.getTouser(usernameString, isToAll));
         TextCardEntity entity = new TextCardEntity();
         entity.setTitle(announcement.getTitile());
-        entity.setDescription(oConvertUtils.getString(announcement.getMsgAbstract(),"空"));
+        entity.setDescription(oConvertUtils.getString(announcement.getMsgAbstract(), "空"));
         entity.setUrl(RestUtil.getBaseUrl() + "/sys/annountCement/show/" + announcement.getId());
         textCard.setTextcard(entity);
         return JwMessageAPI.sendTextCardMessage(textCard, accessToken);

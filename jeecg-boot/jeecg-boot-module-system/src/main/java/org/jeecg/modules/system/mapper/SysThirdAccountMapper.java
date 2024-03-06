@@ -18,7 +18,7 @@ public interface SysThirdAccountMapper extends BaseMapper<SysThirdAccount> {
      * 通过 sysUsername 集合批量查询
      *
      * @param sysUsernameArr username集合
-     * @param thirdType       第三方类型
+     * @param thirdType      第三方类型
      * @return
      */
     List<SysThirdAccount> selectThirdIdsByUsername(@Param("sysUsernameArr") String[] sysUsernameArr, @Param("thirdType") String thirdType);
