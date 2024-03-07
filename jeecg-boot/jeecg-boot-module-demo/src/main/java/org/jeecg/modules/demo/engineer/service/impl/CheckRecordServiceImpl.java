@@ -1,8 +1,8 @@
 package org.jeecg.modules.demo.engineer.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.CheckRecord;
-import org.jeecg.modules.demo.engineer.entity.SideRecord;
 import org.jeecg.modules.demo.engineer.mapper.CheckRecordMapper;
 import org.jeecg.modules.demo.engineer.service.ICheckRecordService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowLogService;
@@ -12,12 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 /**
  * @Description: 巡查记录
  * @Author: jeecg-boot
- * @Date:   2022-02-19
+ * @Date: 2022-02-19
  * @Version: V1.0
  */
 @Service

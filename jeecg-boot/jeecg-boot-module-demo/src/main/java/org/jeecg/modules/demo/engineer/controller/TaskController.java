@@ -97,7 +97,7 @@ public class TaskController {
         findSupervisionDiary(stepIds, records, "");
 
         records.sort((x, y) -> x.getCreateTime().getTime() > y.getCreateTime().getTime() ? 0 : -1);
-        return Result.OK(records.subList(0, Math.min(records.size(),5)));
+        return Result.OK(records.subList(0, Math.min(records.size(), 5)));
     }
 
 
@@ -136,7 +136,7 @@ public class TaskController {
         findSupervisionDiary(stepIds, records, userName);
 
         records.sort((x, y) -> x.getCreateTime().getTime() > y.getCreateTime().getTime() ? 0 : -1);
-        return Result.OK(records.subList(0, Math.min(records.size(),5)));
+        return Result.OK(records.subList(0, Math.min(records.size(), 5)));
     }
 
     private void findAgreedMinute(List<Object> stepIds, ArrayList<TaskModel> records, String userName) {

@@ -1,5 +1,6 @@
 package org.jeecg.modules.demo.engineer.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.NoticeRecord;
 import org.jeecg.modules.demo.engineer.mapper.NoticeRecordMapper;
@@ -11,12 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 /**
- * @Description:  通知单
+ * @Description: 通知单
  * @Author: jeecg-boot
- * @Date:   2022-02-19
+ * @Date: 2022-02-19
  * @Version: V1.0
  */
 @Service

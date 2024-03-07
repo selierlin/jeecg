@@ -3,8 +3,6 @@ package org.jeecg.modules.demo.engineer.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.jeecg.common.system.vo.DictModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

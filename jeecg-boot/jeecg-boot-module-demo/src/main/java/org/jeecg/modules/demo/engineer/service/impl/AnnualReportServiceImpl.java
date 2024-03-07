@@ -1,8 +1,8 @@
 package org.jeecg.modules.demo.engineer.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.AnnualReport;
-import org.jeecg.modules.demo.engineer.entity.SideRecord;
 import org.jeecg.modules.demo.engineer.mapper.AnnualReportMapper;
 import org.jeecg.modules.demo.engineer.service.IAnnualReportService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowLogService;
@@ -12,12 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 /**
  * @Description: 月季年报
  * @Author: jeecg-boot
- * @Date:   2022-02-19
+ * @Date: 2022-02-19
  * @Version: V1.0
  */
 @Service

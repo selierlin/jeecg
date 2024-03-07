@@ -1,22 +1,21 @@
 package org.jeecg.modules.demo.engineer.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.AgreedMinute;
 import org.jeecg.modules.demo.engineer.mapper.AgreedMinuteMapper;
 import org.jeecg.modules.demo.engineer.service.IAgreedMinuteService;
-import org.springframework.stereotype.Service;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowLogService;
 import org.jeecg.modules.demo.engineer.service.IWorkFlowService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.jeecg.common.api.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 
 /**
  * @Description: 会议纪要
  * @Author: jeecg-boot
- * @Date:   2022-03-13
+ * @Date: 2022-03-13
  * @Version: V1.0
  */
 @Service

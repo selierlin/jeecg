@@ -1,16 +1,15 @@
 package org.jeecg.modules.demo.engineer.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.modules.demo.engineer.entity.InspectionRecords;
 import org.jeecg.modules.demo.engineer.mapper.InspectionRecordsMapper;
 import org.jeecg.modules.demo.engineer.service.IInspectionRecordsService;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 /**
  * @Description: 报验记录
  * @Author: jeecg-boot
- * @Date:   2022-02-15
+ * @Date: 2022-02-15
  * @Version: V1.0
  */
 @Service

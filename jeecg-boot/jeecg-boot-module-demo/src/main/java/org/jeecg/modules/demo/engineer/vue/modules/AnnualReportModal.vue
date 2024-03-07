@@ -1,60 +1,61 @@
 <template>
   <j-modal
-    :title="title"
-    :width="width"
-    :visible="visible"
-    switchFullscreen
-    @ok="handleOk"
-    :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
-    @cancel="handleCancel"
-    cancelText="关闭">
+      :title="title"
+      :width="width"
+      :visible="visible"
+      switchFullscreen
+      @ok="handleOk"
+      :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
+      @cancel="handleCancel"
+      cancelText="关闭">
     <annual-report-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></annual-report-form>
   </j-modal>
 </template>
 
 <script>
 
-  import AnnualReportForm from './AnnualReportForm'
-  export default {
-    name: 'AnnualReportModal',
-    components: {
-      AnnualReportForm
+import AnnualReportForm from './AnnualReportForm'
+
+export default {
+  name: 'AnnualReportModal',
+  components: {
+    AnnualReportForm
+  },
+  data() {
+    return {
+      title: '',
+      width: 800,
+      visible: false,
+      disableSubmit: false
+    }
+  },
+  methods: {
+    add() {
+      this.visible = true
+      this.$nextTick(() => {
+        this.$refs.realForm.add();
+      })
     },
-    data () {
-      return {
-        title:'',
-        width:800,
-        visible: false,
-        disableSubmit: false
-      }
+    edit(record) {
+      this.visible = true
+      this.$nextTick(() => {
+        this.$refs.realForm.edit(record);
+      })
     },
-    methods: {
-      add () {
-        this.visible=true
-        this.$nextTick(()=>{
-          this.$refs.realForm.add();
-        })
-      },
-      edit (record) {
-        this.visible=true
-        this.$nextTick(()=>{
-          this.$refs.realForm.edit(record);
-        })
-      },
-      close () {
-        this.$emit('close');
-        this.visible = false;
-      },
-      handleOk () {
-        this.$refs.realForm.submitForm();
-      },
-      submitCallback(){
-        this.$emit('ok');
-        this.visible = false;
-      },
-      handleCancel () {
-        this.close()
-      }
+    close() {
+      this.$emit('close');
+      this.visible = false;
+    },
+    handleOk() {
+      this.$refs.realForm.submitForm();
+    },
+    submitCallback() {
+      this.$emit('ok');
+      this.visible = false;
+    },
+    handleCancel() {
+      this.close()
     }
   }
+}
 </script>

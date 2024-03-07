@@ -78,6 +78,7 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
         IPage<ApprovalRecords> pageList = approvalRecordsService.page(page, queryWrapper);
         return Result.OK(pageList);
     }
+
     /**
      * 分页待办列表查询
      *
@@ -255,7 +256,7 @@ public class ApprovalRecordsController extends JeecgController<ApprovalRecords, 
         if (StringUtils.isBlank(id) || (isPass == null || isPass < 0)) {
             return Result.error("参数校验失败");
         }
-        return approvalRecordsService.audit(id, JwtUtil.getUserNameByToken(req),isPass, approvalRecords.getApprovalOpinion());
+        return approvalRecordsService.audit(id, JwtUtil.getUserNameByToken(req), isPass, approvalRecords.getApprovalOpinion());
     }
 
     /**

@@ -1,8 +1,8 @@
 package org.jeecg.modules.demo.engineer.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.demo.engineer.entity.WorkFlow;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -44,9 +44,10 @@ public interface IWorkFlowService extends IService<WorkFlow> {
      * @return
      */
     Result getWorkFlowStep(List<String> roleIds, Boolean isFinish);
+
     /**
      * 查询未完成操作的步骤
-
+     *
      * @return
      */
     Result getWorkFlowUnFinishStep();
