@@ -147,10 +147,10 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     @RequestMapping(value = "/exportXls")
     @PermissionData(pageComponent = "jeecg/JeecgDemoList")
     public ModelAndView exportXls(HttpServletRequest request, JeecgDemo jeecgDemo) {
-        //获取导出表格字段
+        // 获取导出表格字段
         String exportFields = jeecgDemoService.getExportFields();
-        //分sheet导出表格字段
-        return super.exportXlsSheet(request, jeecgDemo, JeecgDemo.class, "单表模型",exportFields,500);
+        // 分sheet导出表格字段
+        return super.exportXlsSheet(request, jeecgDemo, JeecgDemo.class, "单表模型", exportFields, 500);
     }
 
     /**
@@ -258,7 +258,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     public Result<?> loadMpPermissonList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                          HttpServletRequest req) {
         QueryWrapper<JeecgDemo> queryWrapper = new QueryWrapper<JeecgDemo>();
-        //编程方式，给queryWrapper装载数据权限规则
+        // 编程方式，给queryWrapper装载数据权限规则
         QueryGenerator.installAuthMplus(queryWrapper, JeecgDemo.class);
         Page<JeecgDemo> page = new Page<JeecgDemo>(pageNo, pageSize);
         IPage<JeecgDemo> pageList = jeecgDemoService.page(page, queryWrapper);
