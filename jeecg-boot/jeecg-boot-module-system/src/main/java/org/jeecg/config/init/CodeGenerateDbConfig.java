@@ -33,17 +33,19 @@ public class CodeGenerateDbConfig {
 
     @Bean
     public CodeGenerateDbConfig initCodeGenerateDbConfig() {
-        if (StringUtils.isNotBlank(url)) {
-            if (StringUtils.isNotBlank(publicKey)) {
-                try {
-                    password = ConfigTools.decrypt(publicKey, password);
-                } catch (Exception e) {
-                    log.error("代码生成器数据库连接，数据库密码解密失败！", e);
-                }
-            }
-            CodegenDatasourceConfig.initDbConfig(driverClassName, url, username, password);
-            log.info("代码生成器数据库连接，使用application.yml的DB配置 ###################");
+
+        if (StringUtils.isBlank(url)) {
+            return null;
         }
+        if (StringUtils.isNotBlank(publicKey)) {
+            try {
+                password = ConfigTools.decrypt(publicKey, password);
+            } catch (Exception e) {
+                log.error("代码生成器数据库连接，数据库密码解密失败！", e);
+            }
+        }
+        CodegenDatasourceConfig.initDbConfig(driverClassName, url, username, password);
+        log.info("代码生成器数据库连接，使用application.yml的DB配置 ###################");
         return null;
     }
 }
