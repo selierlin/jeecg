@@ -1,6 +1,7 @@
 package org.jeecg.modules.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.RequiredArgsConstructor;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
 import org.jeecg.common.system.api.ISysBaseAPI;
@@ -19,13 +20,12 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/sys/api")
+@RequiredArgsConstructor
 public class SystemAPIController {
 
-    @Autowired
-    private ISysBaseAPI sysBaseAPI;
+    private final ISysBaseAPI sysBaseAPI;
 
-    @Autowired
-    private ISysUserService sysUserService;
+    private final ISysUserService sysUserService;
 
 
     /**
